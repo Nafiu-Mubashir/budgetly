@@ -18,12 +18,45 @@
           class="w-64 bg-gray-800 text-white h-full p-4 transform ease-in-out duration-300"
         >
           <button @click="toggleMobileSidebar" class="text-white mb-4">✖</button>
-          <ul class="space-y-4">
-            <li><router-link to="/dashboard" class="block p-2 hover:bg-gray-700">Dashboard</router-link></li>
-            <li><router-link to="/dashboard/budgets" class="block p-2 hover:bg-gray-700">Budgets</router-link></li>
-            <li><router-link to="/dashboard/transactions" class="block p-2 hover:bg-gray-700">Transactions</router-link></li>
-            <li><router-link to="/dashboard/insights" class="block p-2 hover:bg-gray-700">Insights</router-link></li>
-          </ul>
+        <ul class="space-y-4 mt-4">
+          <li>
+            <router-link
+            @click="toggleMobileSidebar"
+              to="/dashboard"
+              class="block p-2 hover:bg-gray-700 rounded-md"
+              >Dashboard</router-link
+            >
+          </li>
+          <li>
+            <router-link
+            @click="toggleMobileSidebar"
+              to="/dashboard/budget"
+              class="block p-2 hover:bg-gray-700 rounded-md"
+              >Budgets</router-link
+            >
+          </li>
+          <li>
+            <router-link
+              to="/dashboard/transaction"
+              class="block p-2 hover:bg-gray-700 rounded-md"
+              >Transactions</router-link
+            >
+          </li>
+          <li>
+            <router-link
+              to="/dashboard/insight"
+              class="block p-2 hover:bg-gray-700 rounded-md"
+              >Insights</router-link
+            >
+          </li>
+          <li>
+            <router-link
+              to="/dashboard/profile"
+              class="block p-2 hover:bg-gray-700 rounded-md"
+              >Profile</router-link
+            >
+          </li>
+        </ul>
         </div>
         <!-- Click outside to close the sidebar -->
         <div class="flex-1" @click="toggleMobileSidebar"></div>
