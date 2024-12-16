@@ -14,7 +14,7 @@
       title="Delete Budget"
       @close="showModal = false"
     >
-      <form @submit.prevent="editBudget" class="bg-white">
+      <form @submit.prevent="deleteBudget" class="bg-white">
         <div class="w-full mx-auto space-y-8 flex flex-col justify-center">
           <p class="text-center p-6">
             Are you sure you want to delete this {{ title }}?
@@ -42,6 +42,7 @@
 <script setup>
 import { ref } from "vue";
 import Modal from "@/components/modal/Modal.vue";
+import { toast } from "vue3-toastify";
 
 // Destructure props
 const { id, title } = defineProps({
@@ -53,7 +54,9 @@ const { id, title } = defineProps({
 const showModal = ref(false);
 
 // Function to handle edit action
-const editBudget = () => {
+const deleteBudget = () => {
   console.log("Editing Budget with ID:", id);
+  toast.success("Budget deleted successfully")
+  showModal.value = false
 };
 </script>

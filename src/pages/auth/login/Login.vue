@@ -45,19 +45,28 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-// import api from "../../utils/api";
+import { toast } from "vue3-toastify";
+import { useStore } from "vuex";
+// const store = useStore();
 
 const email = ref("");
 const password = ref("");
 const router = useRouter();
-
 const login = async () => {
-  //   try {
-  //     const response = await api.post("/login", { email: email.value, password: password.value });
-  //     localStorage.setItem("token", response.data.token);
+  // try {
+  //   const response = await store.dispatch("auth/login", {
+  //     email: email.value,
+  //     password: password.value,
+  //   });
+  //   if (response.status === 200) {
   router.push("/dashboard");
-  //   } catch (error) {
-  //     alert("Login failed");
+  toast.success("Login Successfully");
+  //   }else{
+  // toast.error("An error occured")
+  //     return;
   //   }
+  // } catch (error) {
+  //   alert("Login failed");
+  // }
 };
 </script>

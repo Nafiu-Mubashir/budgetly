@@ -2,7 +2,7 @@
   <div class="h-screen flex">
     <Sidebar />
 
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col w-screen md:w-[80%]">
       <Navbar />
       <main class="flex-grow overflow-y-auto p-4">
         <router-view />

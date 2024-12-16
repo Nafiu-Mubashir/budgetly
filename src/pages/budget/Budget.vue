@@ -5,13 +5,6 @@
     <div class="flex justify-end">
       <CreateBudget />
     </div>
-    <Modal
-      :isVisible="editModal"
-      title="Create A New Budget"
-      @close="editModal = false"
-    >
-      Edit user {{ userId }}
-    </Modal>
     <div class="mt-5">
       <Table :data="tableData" :columns="columns">
         <template #actions="{ row, id }">
@@ -29,7 +22,7 @@
                 </button>
               </li>
               <li>
-                <DeleteBudget :id="id" :name="row.name" />
+                <DeleteBudget :id="id" :name="row.title" />
               </li>
             </ul>
           </Dropdown>
@@ -40,8 +33,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import Modal from "@/components/modal/Modal.vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
 import CreateBudget from "@/components/budgetComponents/CreateBudget.vue";
@@ -62,10 +53,5 @@ const columns = [
   { key: "duration", label: "Duration" },
   { key: "actions", label: "Actions" },
 ];
-
-const editModal = ref(false);
-
-const edit = ref("edit");
-const userId = ref();
 
 </script>

@@ -63,6 +63,7 @@
 <script setup>
 import { ref } from "vue";
 import Modal from "@/components/modal/Modal.vue";
+import { toast } from "vue3-toastify";
 
 const showModal = ref(false);
 
@@ -71,7 +72,8 @@ const total_amount = ref("");
 const duration = ref("");
 
 const createBudget = () =>  {
-
+ toast.success("Budget created successfully");
+ showModal.value = false
 }
 
 </script>

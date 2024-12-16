@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useStore } from 'vuex'; // Import Vuex store for authentication state
 import Login from '@/pages/auth/login/Login.vue';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import Dashboard from '@/pages/dashboard/Dashboard.vue';
@@ -8,8 +9,6 @@ import Transaction from '@/pages/transaction/Transaction.vue';
 import Insight from '@/pages/insight/Insight.vue';
 import NotFound from '@/pages/notFound/NotFound.vue';
 
-const isAuthenticated = () => !!localStorage.getItem('token');
-
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', name: 'Login', component: Login },
@@ -18,7 +17,9 @@ const routes = [
     path: '/dashboard',
     component: DashboardLayout,
     // beforeEnter: (to, from, next) => {
-    //   if (isAuthenticated()) {
+    //   // Use Vuex to check authentication
+    //   const store = useStore();
+    //   if (store.getters['auth/isAuthenticated']) {
     //     next();
     //   } else {
     //     next('/login');
@@ -27,7 +28,6 @@ const routes = [
     children: [
       { path: '', name: 'Dashboard', component: Dashboard },
       { path: 'budget', name: 'Budget', component: Budget },
-      // { path: '/budgets/:id', name: 'BudgetDetail', component: BudgetDetail },
       { path: 'transaction', name: 'Transaction', component: Transaction },
       { path: 'insight', name: 'Insight', component: Insight },
       { path: 'profile', name: 'Profile', component: '' },
