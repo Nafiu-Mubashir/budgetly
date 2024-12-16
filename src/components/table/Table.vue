@@ -1,13 +1,13 @@
 <template>
-  <div class="overflow-scroll">
-    <table class="table-auto w-full border-collapse border border-gray-200 ">
+  <div class="relative overflow-x-aut">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <!-- Table Header -->
-      <thead class="bg-gray-100">
-        <tr>
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr class="">
           <th
             v-for="column in columns"
             :key="column.key"
-            class="border border-gray-300 px-4 py-2 text-left whitespace-nowrap"
+            class="px-6 py-3 whitespace-nowrap"
           >
             {{ column.label }}
           </th>
@@ -18,12 +18,12 @@
         <tr
           v-for="(row, rowIndex) in data"
           :key="rowIndex"
-          class="hover:bg-gray-50"
+          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50"
         >
           <td
             v-for="column in columns"
             :key="column.key"
-            class="border border-gray-300 px-4 py-2 whitespace-nowrap"
+            class="px-4 py-2 whitespace-nowrap"
           >
             <!-- Check if the column is 'actions', use slot -->
             <template v-if="column.key === 'actions'">

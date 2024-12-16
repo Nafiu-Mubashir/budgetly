@@ -1,25 +1,21 @@
 <template>
-  <h1 class="text-2xl font-bold mb-6">
-    Welcome to Your transaction management
-  </h1>
-  <p>This is the main transaction management page.</p>
   <div>
     <!-- Open Modal Button -->
     <button
       @click="showModal = true"
       class="bg-main text-white px-4 py-2 rounded"
     >
-      Create Transaction
+      Create Budget
     </button>
 
     <!-- Reusable Modal -->
     <Modal
       :isVisible="showModal"
-      title="Create A New Transaction"
+      title="Create A New Budget"
       @close="showModal = false"
     >
       <form
-        @submit.prevent="login"
+        @submit.prevent="createBudget"
         class="flex flex-col justify-center bg-white"
       >
         <div class="w-full mx-auto space-y-4">
@@ -47,27 +43,19 @@
           <div class="flex justify-between gap-3">
             <button
               type="submit"
-              class="w-full md:w-[40%] bg-main text-white p-2 rounded"
+              class="w-auto md:w-[40%] bg-main text-white p-2 rounded"
             >
-              Create Transaction
+              Create Budget
             </button>
             <button
               @click="showModal = false"
               class="bg-gray-500 text-white px-4 py-2 rounded"
             >
-              Close
+              Cancel
             </button>
           </div>
         </div>
       </form>
-      <!-- <template #footer>
-        <button
-          @click="showModal = false"
-          class="bg-gray-500 text-white px-4 py-2 rounded"
-        >
-          Close
-        </button>
-      </template> -->
     </Modal>
   </div>
 </template>
@@ -82,12 +70,8 @@ const title = ref("");
 const total_amount = ref("");
 const duration = ref("");
 
-const login = async () => {
-  //   try {
-  //     const response = await api.post("/login", { total_amount: total_amount.value, duration: duration.value });
-  //     localStorage.setItem("token", response.data.token);
-  //   } catch (error) {
-  //     alert("Login failed");
-  //   }
-};
+const createBudget = () =>  {
+
+}
+
 </script>

@@ -2,8 +2,9 @@
   <div class="grid grid-cols-1 md:grid-cols-2 h-screen bg-gray-100">
     <form
       @submit.prevent="login"
-      class="flex flex-col justify-center bg-white p-6 rounded shadow-md"
+      class="flex flex-col justify-center bg-white p-6 relative"
     >
+      <h1 class="absolute top-5 font-bold text-2xl text-main">Budgetly</h1>
       <div class="w-full md:w-[70%] mx-auto space-y-4">
         <h2 class="text-2xl font-bold mb-4">Login</h2>
         <input
@@ -20,18 +21,24 @@
           class="w-full mb-4 p-2 border rounded"
           required
         />
-        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded">
+        <button type="submit" class="w-full bg-main text-white p-2 rounded">
           Login
         </button>
         <p class="">
-          Don't have an account
-          <router-link to="/registration" class="underline"
+          Don't have an account?
+          <router-link to="/registration" class="underline text-main"
             >Sign Up</router-link
           >
         </p>
       </div>
     </form>
-    <div class="hidden md:block">image</div>
+    <div class="hidden md:block">
+      <img
+        src="../../../assets/login.jpg"
+        alt="login image"
+        className="h-screen w-full"
+      />
+    </div>
   </div>
 </template>
 
