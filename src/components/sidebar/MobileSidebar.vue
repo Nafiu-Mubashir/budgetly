@@ -17,11 +17,15 @@
         <div
           class="w-64 bg-white text-black h-full p-4 transform ease-in-out duration-300"
         >
-          <div class="flex justify-between">
-            <h1 class="uppercase font-bold text-xl text-main">zeta</h1>
+          <div class="flex items-center justify-between mb-4">
+            <img
+          src="../../assets/logo.png"
+          class="block h-8 w-10"
+          alt="hg"
+        />
             <button
               @click="toggleMobileSidebar"
-              class="text-white mb-4 block ml-auto text-sm"
+              class="text-white block ml-auto text-sm"
             >
               ✖
             </button>
