@@ -9,7 +9,7 @@
     <div class="flex justify-between items-center">
       <!-- Modal Header -->
     <header v-if="title" class="mb-">
-      <h2 class="text-xl font-bold">{{ title }}</h2>
+      <h2 class="text-base font-bold">{{ title }}</h2>
     </header>
       <!-- Close Button -->
       <button

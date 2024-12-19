@@ -4,9 +4,16 @@
       @submit.prevent="login"
       class="flex flex-col justify-center bg-white p-6 relative"
     >
-      <h1 class="absolute top-5 font-bold text-2xl text-main">Budgetly</h1>
+       <img
+          src="../../../assets/logo.png"
+          class="absolute top-5 "
+          alt="hg"
+        />
       <div class="w-full md:w-[70%] mx-auto space-y-4">
-        <h2 class="text-2xl font-bold mb-4">Login</h2>
+        <div class="mb-4">
+          <h2 class="text-2xl font-bold">Login</h2>
+          <p>Welcome back! Please enter your details.</p>
+        </div>
         <input
           v-model="email"
           type="email"
@@ -21,7 +28,14 @@
           class="w-full mb-4 p-2 border rounded"
           required
         />
-        <button type="submit" class="w-full bg-main text-white p-2 rounded">
+        <div class="flex items-center gap-1">
+          <input type="checkbox" name=""class="mt-0.5" id="">
+          Remember me
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-main text-white p-2 rounded capitalize"
+        >
           Login
         </button>
         <p class="">
@@ -32,9 +46,9 @@
         </p>
       </div>
     </form>
-    <div class="hidden md:block">
+    <div class="hidden md:block bg-white">
       <img
-        src="../../../assets/login.jpg"
+        src="../../../assets/login.avif"
         alt="login image"
         className="h-screen w-full"
       />

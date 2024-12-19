@@ -1,11 +1,19 @@
 <template>
   <!-- Desktop Sidebar -->
-  <aside class="hidden md:block w-60 bg-white text-black p-4 h-screen shadow-md">
-    <div class="flex flex-col justify-between h-full">
-      <!-- Sidebar Header -->
-      <div class="space-y-10">
-        <h1 class="uppercase font-bold text-2xl text-main">Budgetly</h1>
-
+  <aside
+    class="hidden md:block w-60 bg-secondary/20 text-black p-4 h-screen border-r"
+  >
+  <div class="flex flex-col justify-between h-full">
+    <!-- Sidebar Header -->
+    <div class="space-y-10">
+        <div class="border-b p-1.5">
+          <img
+          src="../../assets/logo.png"
+          class="block"
+          alt="hg"
+        />
+        </div>
+        
         <!-- Navigation Links -->
         <ul class="space-y-4 mt-4">
           <li
@@ -20,7 +28,7 @@
               class="flex items-center space-x-2 p-2 rounded-md transition hover:bg-main hover:text-white"
             >
               <!-- Icon -->
-              <!-- <span class="w-6 h-6 text-gray-500" v-html="navLink.icon.render()"></span> -->
+              <img :src="navLink.icon" class="h-5 w-5" alt="icon" />
               <!-- Link Name -->
               <span>{{ navLink.name }}</span>
             </router-link>
@@ -29,9 +37,11 @@
       </div>
 
       <!-- Logout -->
-      <h1 class="p-2 cursor-pointer text-red-500 hover:text-red-600" @click="logout">
-        Logout
-      </h1>
+
+      <div class="flex items-center cursor-pointer" @click="logout">
+        <img src="../../assets/logout.png" class="h-5 w-5" alt="" />
+        <h1 class="p-2 text-red-500 hover:text-red-600">Logout</h1>
+      </div>
     </div>
   </aside>
 </template>
@@ -39,7 +49,11 @@
 <script setup>
 import { useLogout } from "@/utils/logout.js";
 import { useRoute } from "vue-router";
-import { LibraryIcon, ChartBarIcon, DatabaseIcon, UserIcon, BriefcaseIcon, } from "@vue-hero-icons/outline";
+import dashboard from "@/assets/dashboard.png";
+import budget from "@/assets/budget.png";
+import transaction from "@/assets/transaction.png";
+import insight from "@/assets/insight.png";
+import profile from "@/assets/profile.png";
 
 // Logout utility
 const logout = useLogout();
@@ -55,29 +69,27 @@ const navLinks = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    icon: LibraryIcon, // Dashboard Icon
+    icon: dashboard, // Dashboard Icon
   },
   {
     path: "/dashboard/budget",
     name: "Budget",
-    icon: DatabaseIcon, // Budget Icon
+    icon: budget, // Budget Icon
   },
   {
     path: "/dashboard/transaction",
     name: "Transaction",
-    icon: ChartBarIcon, // Transaction Icon
+    icon: transaction, // Transaction Icon
   },
   {
     path: "/dashboard/insight",
     name: "Insight",
-    icon: BriefcaseIcon, // Insight Icon
+    icon: insight, // Insight Icon
   },
   {
     path: "/dashboard/profile",
     name: "Profile",
-    icon: UserIcon, // Profile Icon
+    icon: profile, // Profile Icon
   },
 ];
 </script>
-
-

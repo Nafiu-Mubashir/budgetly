@@ -1,7 +1,10 @@
 <template>
-  <h1 class="text-2xl font-bold mb-6">Welcome to Your Budget</h1>
-  <p>This is the main budget management page.</p>
-  <div>
+  <div class="md:w-[95%] mx-auto min-h-screen space-y-3">
+    <section class="">
+      <h1 class="text-lg font-bold">
+       Budget
+      </h1>
+    </section>
     <div class="flex justify-end">
       <CreateBudget />
     </div>
@@ -41,9 +44,11 @@ import DeleteBudget from "@/components/budgetComponents/DeleteBudget.vue";
 import ViewBudget from "@/components/budgetComponents/ViewBudget.vue";
 
 const tableData = [
-  { id: 1, title: "John Doe", total_amount: 28, duration: "john@example.com" },
-  { id: 2, title: "Jane Smith", total_amount: 34, duration: "jane@example.com" },
-  { id: 3, title: "Alice Johnson", total_amount: 22, duration: "alice@example.com" },
+  { id: 1, title: "Food", total_amount: "30,000", duration: "monthly" },
+  { id: 2, title: "Fuel", total_amount: "20,000", duration: "weekly" },
+  { id: 3, title: "House Rent", total_amount: "35,000", duration: "yearly" },
+  { id: 3, title: "Router Subscription", total_amount: "100,000", duration: "yearly" },
+  { id: 3, title: "Gym", total_amount: "15,000", duration: "monthly" },
 ];
 
 const columns = [

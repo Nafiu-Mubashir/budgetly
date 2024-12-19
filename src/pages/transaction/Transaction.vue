@@ -1,93 +1,74 @@
 <template>
-  <h1 class="text-2xl font-bold mb-6">
-    Welcome to Your transaction management
-  </h1>
-  <p>This is the main transaction management page.</p>
-  <div>
-    <!-- Open Modal Button -->
-    <button
-      @click="showModal = true"
-      class="bg-main text-white px-4 py-2 rounded"
-    >
-      Create Transaction
-    </button>
+  <div class="md:w-[95%] mx-auto min-h-screen space-y-3">
+    <section class="">
+      <h1 class="text-lg font-bold">
+       Transaction
+      </h1>
+    </section>
+    <div class="flex justify-end">
+      <CreateTransaction />
+    </div>
 
-    <!-- Reusable Modal -->
-    <Modal
-      :isVisible="showModal"
-      title="Create A New Transaction"
-      @close="showModal = false"
-    >
-      <form
-        @submit.prevent="login"
-        class="flex flex-col justify-center bg-white"
-      >
-        <div class="w-full mx-auto space-y-4">
-          <input
-            v-model="title"
-            type="text"
-            placeholder="title"
-            class="w-full p-2 border rounded"
-            required
-          />
-          <input
-            v-model="total_amount"
-            type="total_amount"
-            placeholder="total_amount"
-            class="w-full mb-4 p-2 border rounded"
-            required
-          />
-          <input
-            v-model="duration"
-            type="duration"
-            placeholder="duration"
-            class="w-full mb-4 p-2 border rounded"
-            required
-          />
-          <div class="flex justify-between gap-3">
-            <button
-              type="submit"
-              class="w-full md:w-[40%] bg-main text-white p-2 rounded"
-            >
-              Create Transaction
-            </button>
-            <button
-              @click="showModal = false"
-              class="bg-gray-500 text-white px-4 py-2 rounded"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </form>
-      <!-- <template #footer>
-        <button
-          @click="showModal = false"
-          class="bg-gray-500 text-white px-4 py-2 rounded"
-        >
-          Close
-        </button>
-      </template> -->
-    </Modal>
+    <div class="mt-5">
+      <Table :data="tableData" :columns="columns">
+        <template #actions="{ row, id }">
+          <Dropdown>
+            <ul class="py-1">
+              <li>
+                <EditTransaction :userData="{ row }" />
+              </li>
+              <li>
+                <button
+                  @click="change"
+                  class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                >
+                  <ViewTransaction :userData="{ row }" />
+                </button>
+              </li>
+              <li>
+                <DeleteTransaction :id="id" :name="row.title" />
+              </li>
+            </ul>
+          </Dropdown>
+        </template>
+      </Table>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import Modal from "@/components/modal/Modal.vue";
+import CreateTransaction from "@/components/transactionComponents/CreateTransaction.vue";
+import EditTransaction from "@/components/transactionComponents/EditTransaction.vue";
+import ViewTransaction from "@/components/transactionComponents/ViewTransaction.vue";
+import DeleteTransaction from "@/components/transactionComponents/DeleteTransaction.vue";
+import Table from "@/components/table/Table.vue";
+import Dropdown from "@/components/dropdown/Dropdown.vue";
 
-const showModal = ref(false);
+const tableData = [
+  { id: 1, category: "Debit", total_amount: "30,000", narration: "Food Items" },
+  { id: 2, category: "Debit", total_amount: "20,000", narration: "Fuel" },
+  { id: 3, category: "Debit", total_amount: "35,000", narration: "House Rent" },
+  {
+    id: 4,
+    category: "Debit",
+    total_amount: "100,000",
+    narration: "Subscription Fee",
+  },
+  {
+    id: 5,
+    category: "Debit",
+    total_amount: "15,000",
+    narration: "Gym Payment",
+  },
+  { id: 6, category: "Credit", total_amount: "1,000,000", narration: "Salary" },
+];
 
-const title = ref("");
-const total_amount = ref("");
-const duration = ref("");
-
-const login = async () => {
-  //   try {
-  //     const response = await api.post("/login", { total_amount: total_amount.value, duration: duration.value });
-  //     localStorage.setItem("token", response.data.token);
-  //   } catch (error) {
-  //     alert("Login failed");
-  //   }
-};
+const columns = [
+  { key: "id", label: "ID" },
+  { key: "narration", label: "narration" },
+  { key: "total_amount", label: "Total Amount" },
+  { key: "category", label: "category" },
+  { key: "actions", label: "Actions" },
+];
 </script>

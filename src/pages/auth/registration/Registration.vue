@@ -4,8 +4,12 @@
       @submit.prevent="register"
       class="flex flex-col justify-center bg-white p-6 rounded shadow-md"
     >
+      <img src="../../../assets/logo.png" class="absolute top-5" alt="hg" />
       <div class="w-full md:w-[70%] mx-auto space-y-4">
-        <h2 class="text-2xl font-bold mb-4">Registration</h2>
+        <div class="mb-4">
+          <h2 class="text-2xl font-bold">Registration</h2>
+          <p>Enter your details to register your account</p>
+        </div>
         <input
           v-model="username"
           type="text"
@@ -27,16 +31,31 @@
           class="w-full mb-4 p-2 border rounded"
           required
         />
-        <button type="submit" class="w-full bg-main text-white p-2 rounded">
+        <div class="flex items-center gap-1">
+          <input type="checkbox" name="" class="mt-0.5" id="" />
+          I agree to the Terms & Privacy
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-main text-white p-2 rounded capitalize"
+        >
           register
         </button>
         <p class="">
           Already have an account
-          <router-link to="/login" class="underline">Sign In</router-link>
+          <router-link to="/login" class="underline text-main"
+            >Sign In</router-link
+          >
         </p>
       </div>
     </form>
-    <div class="hidden md:block">image</div>
+    <div class="hidden md:block">
+      <img
+        src="../../../assets/reg.jpg"
+        alt="login image"
+        className="h-screen w-full"
+      />
+    </div>
   </div>
 </template>
 

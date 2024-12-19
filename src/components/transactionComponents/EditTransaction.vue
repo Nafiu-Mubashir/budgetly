@@ -11,11 +11,11 @@
     <!-- Reusable Modal -->
     <Modal
       :isVisible="showModal"
-      title="Edit Budget"
+      title="Edit Transaction"
       @close="showModal = false"
     >
       <form
-        @submit.prevent="editBudget"
+        @submit.prevent="editTransaction"
         class=" bg-white"
       >
         <div class="w-full mx-auto space-y-4 flex flex-col justify-center">
@@ -45,7 +45,7 @@
               type="submit"
               class="w-auto bg-main text-white px-4 py-2 rounded"
             >
-             Update
+              Update
             </button>
             <button
               @click="showModal = false"
@@ -60,29 +60,29 @@
   </div>
 </template>
 
+
 <script setup>
 import { ref } from "vue";
 import Modal from "@/components/modal/Modal.vue";
 
-defineProps({
-//   buttonLabel: { type: String, required: true }, // Trigger button label
+// Define props
+const props = defineProps({
   userData: { 
     type: Object, 
-    required: false, // Set as optional to handle undefined cases gracefully
+    required: false,
     // default: () => ({ title: '', total_amount: '', duration: '' }) 
   },
 });
 
 const showModal = ref(false);
-const data = ref({
-    title : '',
-    duration: '',
-    total_amount: ''
-})
 
-const editBudget = () =>  {
-console.log(data.value);
+// Clone userData to a reactive variable
+const data = ref({ ...props.userData.row });
+console.log(data);
 
-}
 
+const editTransaction = () => {
+  console.log("Updated Data:", data.value);
+};
 </script>
+

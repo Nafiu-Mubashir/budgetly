@@ -9,6 +9,7 @@
       xmlns="http://www.w3.org/2000/svg"
       @click="toggleDropdown"
       class="cursor-pointer"
+      ariaCurrent="true"
     >
       <circle cx="8.00016" cy="2.49967" r="1.66667" fill="#848484" />
       <circle cx="8.00016" cy="8.49967" r="1.66667" fill="#848484" />
@@ -18,7 +19,7 @@
     <!-- Dropdown Menu -->
     <div
       v-show="isOpen"
-      class="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-50"
+      class="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-10"
     >
       <slot />
     </div>

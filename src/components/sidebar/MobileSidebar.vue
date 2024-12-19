@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="">
     <!-- Sidebar Toggle Button -->
     <button
       @click="toggleMobileSidebar"
-      class="bg-main text-white p-2 rounded md:hidden"
+      class="bg-white text-main p-2 rounded md:hidden"
     >
       ☰
     </button>
@@ -12,28 +12,55 @@
     <transition name="sidebar">
       <aside
         v-if="isMobileSidebarOpen"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 flex md:hidden"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 flex md:hidden h-screen"
       >
         <div
           class="w-64 bg-white text-black h-full p-4 transform ease-in-out duration-300"
         >
           <div class="flex justify-between">
-             <h1 class="uppercase font-bold text-xl text-main">Budgetly</h1>
-            <button @click="toggleMobileSidebar" class="text-white mb-4 block ml-auto text-sm">
-            ✖
-          </button>
+            <h1 class="uppercase font-bold text-xl text-main">zeta</h1>
+            <button
+              @click="toggleMobileSidebar"
+              class="text-white mb-4 block ml-auto text-sm"
+            >
+              ✖
+            </button>
           </div>
-          <ul class="space-y-4 mt-4">
-            <li v-for="navLink in navLinks">
-              <router-link
-                @click="toggleMobileSidebar"
-                :to="navLink.path"
-                class="block p-2 hover:bg-gray-700 rounded-md"
-                >{{ navLink.name }}</router-link
-              >
-            </li>
-          </ul>
+         <div class="flex flex-col justify-between h-full">
+      <!-- Sidebar Header -->
+      <div class="space-y-">
+        <!-- Navigation Links -->
+        <ul class="space-y-2 mt-4">
+          <li
+            v-for="navLink in navLinks"
+            :key="navLink.name"
+            :class="{
+              'bg-main text-white rounded-md': isActive(navLink.path),
+            }"
+          >
+            <router-link
+              :to="navLink.path"
+              @click="toggleMobileSidebar"
+              class="flex items-center space-x-2 p-2 rounded-md transition hover:bg-main hover:text-white"
+            >
+              <!-- Icon -->
+              <img :src="navLink.icon" class="h-5 w-5" alt="icon" />
+              <!-- Link Name -->
+              <span>{{ navLink.name }}</span>
+            </router-link>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Logout -->
+
+      <div class="flex items-center cursor-pointer" @click="logout">
+        <img src="../../assets/logout.png" class="h-5 w-5" alt="" />
+        <h1 class="p-2 text-red-500 hover:text-red-600">Logout</h1>
+      </div>
+    </div>
         </div>
+        
         <!-- Click outside to close the sidebar -->
         <div class="flex-1" @click="toggleMobileSidebar"></div>
       </aside>
@@ -43,26 +70,49 @@
 
 <script setup>
 import { ref } from "vue";
+import { useLogout } from "@/utils/logout.js";
+import { useRoute } from "vue-router";
+import dashboard from "@/assets/dashboard.png";
+import budget from "@/assets/budget.png";
+import transaction from "@/assets/transaction.png";
+import insight from "@/assets/insight.png";
+import profile from "@/assets/profile.png";
+
+// Logout utility
+const logout = useLogout();
+
+// Current route for active state
+const route = useRoute();
+
+// Determine active link
+const isActive = (path) => route.path === path;
+
+// Navigation links with icons
 const navLinks = [
   {
     path: "/dashboard",
     name: "Dashboard",
+    icon: dashboard, // Dashboard Icon
   },
   {
     path: "/dashboard/budget",
     name: "Budget",
+    icon: budget, // Budget Icon
   },
   {
     path: "/dashboard/transaction",
     name: "Transaction",
+    icon: transaction, // Transaction Icon
   },
   {
     path: "/dashboard/insight",
     name: "Insight",
+    icon: insight, // Insight Icon
   },
   {
     path: "/dashboard/profile",
     name: "Profile",
+    icon: profile, // Profile Icon
   },
 ];
 const isMobileSidebarOpen = ref(false);

@@ -1,13 +1,13 @@
 <template>
   <div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
       <!-- Table Header -->
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr class="">
+      <thead class="text-xs text-white uppercase bg-main rounded-lg">
+        <tr class="rounded-lg">
           <th
             v-for="column in columns"
             :key="column.key"
-            class="px-6 py-3 whitespace-nowrap"
+            class="px-4 py-3 whitespace-nowrap"
           >
             {{ column.label }}
           </th>
@@ -18,7 +18,7 @@
         <tr
           v-for="(row, rowIndex) in data"
           :key="rowIndex"
-          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50"
+          class="bg-white border-b hover:bg-main/10 cursor-pointer"
         >
           <td
             v-for="column in columns"
