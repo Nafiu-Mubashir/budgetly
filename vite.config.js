@@ -16,7 +16,4 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  build: {
-    outDir: 'dist', // Ensure the output directory is correctly named
-  },
 });
