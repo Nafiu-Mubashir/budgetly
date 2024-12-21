@@ -1,38 +1,67 @@
 <template>
   <div class="min-h-screen md:w-[95%] mx-auto space-y-3">
     <!-- Page Header -->
-     <section class="">
-      <h1 class="text-lg font-bold">
-       Financial Insights
-      </h1>
+    <section class="">
+      <h1 class="text-lg font-semibold">Financial Insights</h1>
     </section>
 
     <!-- Filters Section -->
     <section class="flex items-center justify-between">
       <div class="flex flex-col md:flex-row items-center md:gap-2">
-        <label for="timeRange" class="text-sm md:text-lg text-gray-700 font-semibold">Time Range:</label>
-        <select id="timeRange" v-model="filters.timeRange" class="border rounded px-2 py-1 focus:outline-none">
+        <label
+          for="timeRange"
+          class="text-sm md:text-lg text-gray-700 font-semibold"
+          >Time Range:</label
+        >
+        <select
+          id="timeRange"
+          v-model="filters.timeRange"
+          class="border rounded px-2 py-1 focus:outline-none"
+        >
           <option value="7_days">Last 7 Days</option>
           <option value="1_month">Last Month</option>
           <option value="1_year">Last Year</option>
         </select>
       </div>
-      <button @click="exportInsights" class="bg-main text-white text-sm px-2 md:px-4 py-2 rounded">Export Insights</button>
+      <button
+        @click="exportInsights"
+        class="bg-main text-white text-sm px-2 md:px-4 py-2 rounded"
+      >
+        Export Insights
+      </button>
     </section>
 
     <!-- Financial Overview -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2 class="text-base md:text-lg font-bold md:font-semibold text-gray-700">Total Income</h2>
-        <p class="text-base md:text-xl font-bold text-green-600">$ {{ insights.totalIncome }}</p>
+        <h2
+          class="text-base md:text-lg font-bold md:font-semibold text-gray-700"
+        >
+          Total Income
+        </h2>
+        <p class="text-base md:text-xl font-bold text-main">
+          $ {{ insights.totalIncome }}
+        </p>
       </div>
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2 class="text-base md:text-lg font-bold md:font-semibold text-gray-700">Total Expenses</h2>
-        <p class="text-base md:text-xl font-bold text-red-600">$ {{ insights.totalExpenses }}</p>
+        <h2
+          class="text-base md:text-lg font-bold md:font-semibold text-gray-700"
+        >
+          Total Expenses
+        </h2>
+        <p class="text-base md:text-xl font-bold text-red-600">
+          $ {{ insights.totalExpenses }}
+        </p>
       </div>
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2 class="text-base md:text-lg font-bold md:font-semibold text-gray-700">Total Savings</h2>
-        <p class="text-base md:text-xl font-bold text-blue-600">$ {{ insights.totalSavings }}</p>
+        <h2
+          class="text-base md:text-lg font-bold md:font-semibold text-gray-700"
+        >
+          Total Savings
+        </h2>
+        <p class="text-base md:text-xl font-bold text-blue-600">
+          $ {{ insights.totalSavings }}
+        </p>
       </div>
     </section>
 
@@ -67,7 +96,6 @@
     </section>
   </div>
 </template>
-
 
 <script setup>
 import { ref, onMounted } from "vue";

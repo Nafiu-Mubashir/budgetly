@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create an Axios instance
 const api = axios.create({
-    baseURL: "https://your-api-base-url.com", // Replace with your API base URL
+    baseURL: "https://personal-finance-manager-v1ha.onrender.com/api/auth", // Replace with your API base URL
     timeout: 10000, // Timeout after 10 seconds
 });
 
@@ -38,14 +38,14 @@ api.interceptors.response.use(
                 window.location.href = "/login";
             } else if (error.response.status === 500) {
                 // Internal Server Error: Show a generic error message
-                alert("Something went wrong. Please try again later.");
+                console.log("Something went wrong. Please try again later.");
             }
         } else if (error.request) {
             // No response from server
-            alert("No response from server. Please check your network.");
+            console.log("No response from server. Please check your network.");
         } else {
             // Other errors
-            alert("An error occurred: " + error.message);
+            console.log("An error occurred: " + error.message);
         }
 
         return Promise.reject(error);

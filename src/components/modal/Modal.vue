@@ -14,7 +14,7 @@
       <!-- Close Button -->
       <button
         @click="closeModal"
-        class=" text-gray-500 hover:text-black"
+        class=" text-red-500 hover:text-red-600"
       >
         ✖
       </button>

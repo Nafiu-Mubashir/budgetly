@@ -6,7 +6,7 @@ export const useLogout = () => {
   const store = useStore();
 
   const logout = () => {
-    // store.dispatch("auth/logout");
+    store.dispatch("auth/logout");
     router.push("/login");
   };
 

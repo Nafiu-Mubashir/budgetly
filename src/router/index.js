@@ -16,15 +16,15 @@ const routes = [
   {
     path: '/dashboard',
     component: DashboardLayout,
-    // beforeEnter: (to, from, next) => {
-    //   // Use Vuex to check authentication
-    //   const store = useStore();
-    //   if (store.getters['auth/isAuthenticated']) {
-    //     next();
-    //   } else {
-    //     next('/login');
-    //   }
-    // },
+    beforeEnter: (to, from, next) => {
+      // Use Vuex to check authentication
+      const store = useStore();
+      if (store.getters['auth/isAuthenticated']) {
+        next();
+      } else {
+        next('/login');
+      }
+    },
     children: [
       { path: '', name: 'Dashboard', component: Dashboard },
       { path: 'budget', name: 'Budget', component: Budget },

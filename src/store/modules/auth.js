@@ -27,7 +27,9 @@ export default {
             try {
                 const response = await api.post("/login", userObj);
                 commit("SET_TOKEN", response.token);
-                commit("SET_USER", response.user);
+                // commit("SET_USER", response.user);
+                console.log(response);
+                
                 return response;
             } catch (error) {
                 throw error;
@@ -45,7 +47,7 @@ export default {
         //         throw error;
         //     }
         // },
-        async register({commit}, userObj) {
+        async register({ commit }, userObj) {
             try {
                 const response = await api.post("/register", userObj);
                 return response

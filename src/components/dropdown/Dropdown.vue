@@ -19,7 +19,7 @@
     <!-- Dropdown Menu -->
     <div
       v-show="isOpen"
-      class="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-10"
+      class="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-[1000] transform translate-y-2"
     >
       <slot />
     </div>

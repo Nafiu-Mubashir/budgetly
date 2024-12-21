@@ -10,7 +10,7 @@
         <input
           type="text"
           placeholder="Search hear for sending..."
-          class="w-full py-1 px-2 border rounded hidden md:block"
+          class="w-full py-1 px-2 border rounded hidden md:block border-main focus:outline-none placeholder:text-sm"
           required
         />
       </div>

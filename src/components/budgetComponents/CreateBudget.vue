@@ -5,7 +5,7 @@
       @click="showModal = true"
       class="bg-main text-white px-4 py-2 rounded"
     >
-      Create Budget
+      Add Budget
     </button>
 
     <!-- Reusable Modal -->
@@ -19,26 +19,20 @@
         class="flex flex-col justify-center bg-white"
       >
         <div class="w-full mx-auto space-y-4">
-          <input
+          <Input
             v-model="title"
             type="text"
             placeholder="title"
-            class="w-full p-2 border rounded"
-            required
           />
-          <input
+          <Input
             v-model="total_amount"
-            type="total_amount"
+            type="number"
             placeholder="total_amount"
-            class="w-full mb-4 p-2 border rounded"
-            required
           />
-          <input
+          <Input
             v-model="duration"
-            type="duration"
+            type="text"
             placeholder="duration"
-            class="w-full mb-4 p-2 border rounded"
-            required
           />
           <div class="flex justify-between gap-3">
             <button
@@ -64,6 +58,7 @@
 import { ref } from "vue";
 import Modal from "@/components/modal/Modal.vue";
 import { toast } from "vue3-toastify";
+import Input from "../input/Input.vue";
 
 const showModal = ref(false);
 

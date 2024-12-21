@@ -40,7 +40,7 @@
 
       <div class="flex items-center cursor-pointer" @click="logout">
         <img src="../../assets/logout.png" class="h-5 w-5" alt="" />
-        <h1 class="p-2 text-red-500 hover:text-red-600">Logout</h1>
+        <h3 class="p-2 text-red-500 hover:text-red-600">Logout</h3>
       </div>
     </div>
   </aside>

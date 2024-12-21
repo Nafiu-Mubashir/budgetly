@@ -9,9 +9,12 @@ export default {
         'lg': '1024px',
       },
       colors: {
-        main: "#029754",
+        main: "#26C165",
         secondary: "#EBEBEB"
-      }
+      },
+      fontFamily: {
+        sans: ["Poppins", "sans-serif"], // Use Poppins for sans-serif
+      },
     },
   },
   variants: {

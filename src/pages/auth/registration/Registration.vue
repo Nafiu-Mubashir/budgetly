@@ -1,81 +1,101 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 h-screen bg-gray-100">
+  <div class="grid grid-cols-1 md:grid-cols-2 h-screen bg-white">
     <form
       @submit.prevent="register"
-      class="flex flex-col justify-center bg-white p-6 rounded shadow-md"
+      class="flex flex-col justify-center p-6 relative"
     >
       <img src="../../../assets/logo.png" class="absolute top-5" alt="hg" />
-      <div class="w-full md:w-[70%] mx-auto space-y-4">
+      <div class="w-full md:w-[70%] mx-auto space-y-4 mt-10 md:mt-0">
         <div class="mb-4">
-          <h2 class="text-2xl font-bold">Registration</h2>
-          <p>Enter your details to register your account</p>
+          <h2 class="text-2xl font-semibold">Registration</h2>
+          <p class="text-xs md:text-sm text-gray-500 font-[200]">
+            Let's meet you. Enter your details as they appear on your legal
+            documentation
+          </p>
         </div>
-        <input
+        <Input
           v-model="username"
           type="text"
-          placeholder="Username"
-          class="w-full mb-4 p-2 border rounded"
-          required
+          placeholder="Enter your username"
         />
-        <input
-          v-model="email"
-          type="email"
-          placeholder="Email"
-          class="w-full mb-4 p-2 border rounded"
-          required
-        />
-        <input
+        <Input v-model="email" type="email" placeholder="Enter your email" />
+        <Input
           v-model="password"
           type="password"
-          placeholder="Password"
-          class="w-full mb-4 p-2 border rounded"
-          required
+          placeholder="Enter your password"
         />
-        <div class="flex items-center gap-1">
-          <input type="checkbox" name="" class="mt-0.5" id="" />
-          I agree to the Terms & Privacy
+        <div class="text-center md:text-left text-xs text-gray-400">
+          <p>By continuing, you accept our</p>
+          <p><span class="text-main">Terms of Service</span> and <span class="text-main">Privacy Policy</span>.</p>
         </div>
+
+        <!-- Button with loading spinner -->
         <button
           type="submit"
-          class="w-full bg-main text-white p-2 rounded capitalize"
+          class="w-full bg-main text-white p-2 rounded capitalize flex justify-center items-center"
+          :disabled="loading"
         >
-          register
+          <span v-if="!loading">register</span>
+          <span v-else class="loader"></span>
+          <!-- Spinner when loading -->
         </button>
-        <p class="">
+
+        <p class="text-sm">
           Already have an account
-          <router-link to="/login" class="underline text-main"
+          <router-link to="/login" class="text-main"
             >Sign In</router-link
           >
         </p>
       </div>
     </form>
-    <div class="hidden md:block">
-      <img
-        src="../../../assets/reg.jpg"
-        alt="login image"
-        className="h-screen w-full"
-      />
+    <div class="flex justify-center items-center">
+      <div class="hidden md:block">
+        <img
+          src="../../../assets/regs.png"
+          alt="login image"
+          className="h-full w-[75%"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import Input from "@/components/input/Input.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-// import api from "../../utils/api";
+import { toast } from "vue3-toastify";
+import { useStore } from "vuex";
+const store = useStore();
 
 const username = ref("");
 const email = ref("");
 const password = ref("");
 const router = useRouter();
+const loading = ref(false);
 
 const register = async () => {
-  //   try {
-  //     const response = await api.post("/register", { email: email.value, password: password.value });
-  //     localStorage.setItem("token", response.data.token);
-  router.push("/dashboard");
-  //   } catch (error) {
-  //     alert("register failed");
-  //   }
+  loading.value = true; // Show the spinner
+
+  try {
+    const response = await store.dispatch("auth/register", {
+      username: username.value,
+      email: email.value,
+      password: password.value,
+    });
+    console.log(response);
+
+    if (response.statusCode === "200") {
+      router.push("/login");
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  } finally {
+    loading.value = false; // Hide the spinner
+  }
 };
 </script>

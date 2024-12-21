@@ -2,59 +2,84 @@
   <div class="min-h-screen w-full md:w-[95%] mx-auto space-y-3">
     <!-- Welcome Section -->
     <section class="">
-      <h1 class="text-lg font-bold">
-       Dashboard
-      </h1>
+      <h1 class="text-lg font-semibold">Dashboard</h1>
     </section>
 
     <!-- Financial Summary Section -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2 class="text-base md:text-sm lg:text-lg font-bold lg:font-semibold text-gray-700">Total Income</h2>
-        <p class="text-lg md:text-xl font-bold text-green-600">#{{ summary.income }}</p>
+        <h2
+          class="text-base font-semibold lg:font-semibold"
+        >
+          Total Income
+        </h2>
+        <p class="text-lg md:text-md font-semibold text-main">
+          #{{ summary.income }}
+        </p>
       </div>
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2 class="text-base md:text-sm lg:text-lg font-bold lg:font-semibold text-gray-700">Total Expenses</h2>
-        <p class="text-lg md:text-xl font-bold text-red-600">#{{ summary.expenses }}</p>
+        <h2
+          class="text-base font-semibold lg:font-semibold"
+        >
+          Total Expenses
+        </h2>
+        <p class="text-lg md:text-xl font-semibold text-red-600">
+          #{{ summary.expenses }}
+        </p>
       </div>
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2 class="text-base md:text-sm lg:text-lg font-bold lg:font-semibold text-gray-700">Remaining Budget</h2>
-        <p class="text-lg md:text-xl font-bold text-blue-600">#{{ summary.remaining }}</p>
+        <h2
+          class="text-base font-semibold lg:font-semibold"
+        >
+          Remaining Budget
+        </h2>
+        <p class="text-lg md:text-xl font-semibold text-blue-600">
+          #{{ summary.remaining }}
+        </p>
       </div>
     </section>
 
     <section class="bg-white p- rounded-lg shadow-d mt-6">
-  <!-- Budgets Overview Header -->
-  <h2 class="text-lg md:text-xl font-bold text-gray-700 mb-4">Budgets Overview</h2>
+      <!-- Budgets Overview Header -->
+      <h2 class="text-lg md:text-lg font-semibold mb-4">
+        Budgets Overview
+      </h2>
 
-  <!-- Budgets in Grid Format -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-    <!-- Each Budget Overview -->
-    <div
-      v-for="budget in budgets"
-      :key="budget.id"
-      class="p-2 md:p-4 bg-gray-50 rounded-lg shadow-sm"
-    >
-      <p class="text-base md:text-lg font-semibold text-gray-700 capitalize">{{ budget.name }}</p>
-      <div class="relative bg-gray-200 h-2 rounded-full mt-2">
+      <!-- Budgets in Grid Format -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Each Budget Overview -->
         <div
-          class="absolute bg-main h-2 rounded-full"
-          :style="{ width: budget.progress + '%' }"
-        ></div>
+          v-for="budget in budgets"
+          :key="budget.id"
+          class="p-2 md:p-4 bg-gray-50 rounded-lg shadow-sm"
+        >
+          <p
+            class="text-base font-semibold capitalize"
+          >
+            {{ budget.name }}
+          </p>
+          <div class="relative bg-gray-200 h-2 rounded-full mt-2">
+            <div
+              class="absolute bg-main h-2 rounded-full"
+              :style="{ width: budget.progress + '%' }"
+            ></div>
+          </div>
+          <p class="text-sm text-gray-500 mt-2">
+            #{{ budget.spent }} of #{{ budget.total }} spent ({{
+              budget.progress
+            }}%)
+          </p>
+        </div>
       </div>
-      <p class="text-sm text-gray-500 mt-2">
-        #{{ budget.spent }} of #{{ budget.total }} spent ({{ budget.progress }}%)
-      </p>
-    </div>
-  </div>
-</section>
-
+    </section>
 
     <!-- Main Content Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <section class="bg-white p-4 rounded-lg shadow-md lg:col-span-2">
         <!-- Recent Transactions -->
-        <h2 class="text-lg md:text-xl font-bold text-gray-700">Recent Transactions</h2>
+        <h2 class="text-lg md:text-xl font-semibold">
+          Recent Transactions
+        </h2>
         <ul class="mt-4 space-y-3">
           <li
             v-for="transaction in recentTransactions"
@@ -69,11 +94,9 @@
             </div>
             <p
               :class="
-                transaction.type === 'income'
-                  ? 'text-green-600'
-                  : 'text-red-600'
+                transaction.type === 'income' ? 'text-main' : 'text-red-600'
               "
-              class="font-bold flex items-center"
+              class="font-semibold flex items-center"
             >
               <span>{{ transaction.type === "income" ? "+" : "-" }}#</span>
               <span>{{ transaction.amount }}</span>
@@ -84,7 +107,9 @@
 
       <!-- Spending Insights -->
       <section class="bg-white p-4 w-full rounded-lg shadow-md space-y-2">
-        <h2 class="text-lg md:text-xl font-bold text-gray-700">Spending Insights</h2>
+        <h2 class="text-lg md:text-xl font-semibold">
+          Spending Insights
+        </h2>
         <canvas id="spendingChart"></canvas>
       </section>
     </div>

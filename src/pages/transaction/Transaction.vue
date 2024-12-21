@@ -1,13 +1,11 @@
 <template>
   <div class="md:w-[95%] mx-auto min-h-screen space-y-3">
-    <section class="">
-      <h1 class="text-lg font-bold">
+    <section class="flex justify-between items-center">
+      <h1 class="text-lg font-semibold">
        Transaction
       </h1>
+        <CreateTransaction />
     </section>
-    <div class="flex justify-end">
-      <CreateTransaction />
-    </div>
 
     <div class="mt-5">
       <Table :data="tableData" :columns="columns">

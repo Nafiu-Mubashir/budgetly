@@ -3,7 +3,7 @@
     <!-- Sidebar Toggle Button -->
     <button
       @click="toggleMobileSidebar"
-      class="bg-white text-main p-2 rounded md:hidden"
+      class="bg-white text-main p-2 text-xl rounded md:hidden"
     >
       ☰
     </button>
