@@ -1,184 +1,195 @@
 <template>
-  <div class="min-h-screen w-full md:w-[95%] mx-auto space-y-3">
-    <!-- Welcome Section -->
-    <section class="">
-      <h1 class="text-lg font-semibold">Dashboard</h1>
-    </section>
-
-    <!-- Financial Summary Section -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
-      <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2
-          class="text-base font-semibold lg:font-semibold"
-        >
-          Total Income
-        </h2>
-        <p class="text-lg md:text-md font-semibold text-main">
-          #{{ summary.income }}
-        </p>
+  <div class="space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <!-- Overview Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <DashCard
+          v-for="(card, index) in cards"
+          :key="index"
+          :title="card.title"
+          :value="card.value"
+          :growth="card.growth"
+          :growthType="card.growthType"
+        />
       </div>
-      <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2
-          class="text-base font-semibold lg:font-semibold"
-        >
-          Total Expenses
-        </h2>
-        <p class="text-lg md:text-xl font-semibold text-red-600">
-          #{{ summary.expenses }}
-        </p>
-      </div>
-      <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2
-          class="text-base font-semibold lg:font-semibold"
-        >
-          Remaining Budget
-        </h2>
-        <p class="text-lg md:text-xl font-semibold text-blue-600">
-          #{{ summary.remaining }}
-        </p>
-      </div>
-    </section>
 
-    <section class="bg-white p- rounded-lg shadow-d mt-6">
-      <!-- Budgets Overview Header -->
-      <h2 class="text-lg md:text-lg font-semibold mb-4">
-        Budgets Overview
-      </h2>
-
-      <!-- Budgets in Grid Format -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <!-- Each Budget Overview -->
-        <div
-          v-for="budget in budgets"
-          :key="budget.id"
-          class="p-2 md:p-4 bg-gray-50 rounded-lg shadow-sm"
-        >
-          <p
-            class="text-base font-semibold capitalize"
-          >
-            {{ budget.name }}
-          </p>
-          <div class="relative bg-gray-200 h-2 rounded-full mt-2">
-            <div
-              class="absolute bg-main h-2 rounded-full"
-              :style="{ width: budget.progress + '%' }"
-            ></div>
-          </div>
-          <p class="text-sm text-gray-500 mt-2">
-            #{{ budget.spent }} of #{{ budget.total }} spent ({{
-              budget.progress
-            }}%)
-          </p>
-        </div>
+      <!-- Financial Statistics -->
+      <div class="bg-white rounded-lg shadow p-3">
+        <h2 class="text-lg font-bold mb-4">Financial Statistics</h2>
+        <ApexChart
+          type="bar"
+          height="250"
+          :options="chartOptions"
+          :series="chartSeries"
+        />
       </div>
-    </section>
+    </div>
 
-    <!-- Main Content Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <section class="bg-white p-4 rounded-lg shadow-md lg:col-span-2">
-        <!-- Recent Transactions -->
-        <h2 class="text-lg md:text-xl font-semibold">
-          Recent Transactions
-        </h2>
-        <ul class="mt-4 space-y-3">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+      <!-- Recent Transactions -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-bold mb-4">Recent Transactions</h2>
+        <ul class="space-y-4">
           <li
-            v-for="transaction in recentTransactions"
-            :key="transaction.id"
-            class="flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm"
+            v-for="(transaction, index) in recentTransactions"
+            :key="index"
+            class="flex justify-between"
           >
-            <div>
-              <p class="font-medium text-gray-800">
-                {{ transaction.category }}
-              </p>
-              <p class="text-sm text-gray-500">{{ transaction.date }}</p>
+            <div class="flex items-center space-x-4">
+              <!-- <img
+                :src="transaction.icon"
+                alt="icon"
+                class="w-10 h-10 rounded-full p-1 bg-main/20"
+              /> -->
+              <div>
+                <p class="font-bold">{{ transaction.name }}</p>
+                <p class="text-sm text-gray-500">{{ transaction.date }}</p>
+              </div>
             </div>
             <p
-              :class="
-                transaction.type === 'income' ? 'text-main' : 'text-red-600'
-              "
-              class="font-semibold flex items-center"
+              :class="[
+                'text-sm font-bold',
+                transaction.amount > 0 ? 'text-green-500' : 'text-red-500',
+              ]"
             >
-              <span>{{ transaction.type === "income" ? "+" : "-" }}#</span>
-              <span>{{ transaction.amount }}</span>
+              {{ transaction.amount > 0 ? "+" : "" }}{{ transaction.amount }}
             </p>
           </li>
         </ul>
-      </section>
+      </div>
 
-      <!-- Spending Insights -->
-      <section class="bg-white p-4 w-full rounded-lg shadow-md space-y-2">
-        <h2 class="text-lg md:text-xl font-semibold">
-          Spending Insights
-        </h2>
-        <canvas id="spendingChart"></canvas>
-      </section>
+      <div class="space-y-3 col-span-2">
+        <div class="bg-white rounded-lg shadow space-y-3 p-4">
+          <h2 class="text-lg font-bold">Monthly Budget</h2>
+          <!-- Monthly Budget -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <DashBudgetCard title="Residential Costs" amount="$1,200" />
+            <DashBudgetCard title="Transportation" amount="$36.2" />
+            <DashBudgetCard title="Education" amount="$3,450" />
+            <DashBudgetCard title="Holiday" amount="$29.0" />
+          </div>
+        </div>
+
+        <!-- All Payouts Table -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-bold mb-4">All Payouts</h2>
+          <Table :data="payouts" :columns="tableColumns" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useStore } from "vuex";
-import Chart from "chart.js/auto";
+import ApexChart from "vue3-apexcharts";
+import DashCard from "@/components/cards/DashCard.vue";
+import DashBudgetCard from "@/components/cards/DashBudgetCard.vue";
+import Table from "@/components/table/Table.vue";
+import User from "@/assets/profile.png"
 
-const store = useStore();
-
-const user = ref({
-  name: "Mubashir N.",
-});
-
-const summary = ref({
-  income: "3,000,000",
-  expenses: "1,000,000",
-  remaining: "2,000,000",
-});
-
-const budgets = ref([
-  { id: 1, name: "Food", spent: 200, total: 500, progress: 40 },
-  { id: 2, name: "Entertainment", spent: 100, total: 200, progress: 50 },
-  { id: 3, name: "subscription", spent: 100, total: 200, progress: 80 },
-]);
-
-const recentTransactions = ref([
-  {
-    id: 1,
-    category: "Groceries",
-    date: "2024-12-17",
-    type: "expense",
-    amount: 75,
-  },
-  { id: 2, category: "Fuel", date: "2024-12-16", type: "expense", amount: 40 },
-  {
-    id: 3,
-    category: "Salary",
-    date: "2024-12-15",
-    type: "income",
-    amount: 3000,
-  },
-]);
-
-// Chart Initialization
-const initChart = () => {
-  const ctx = document.getElementById("spendingChart").getContext("2d");
-  new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["Food", "Rent", "Entertainment"],
-      datasets: [
-        {
-          label: "Spending",
-          data: [500, 1200, 150],
-          backgroundColor: ["#f87171", "#60a5fa", "#34d399"],
-        },
-      ],
+const chartOptions = {
+  chart: { id: "financial-statistics", toolbar: { show: false } },
+  xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May"] },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      borderRadius: 5,
+      columnWidth: "55%",
+      borderRadiusApplication: "end",
     },
-    options: {
-      responsive: true,
-    },
-  });
+  },
 };
 
-onMounted(() => {
-  initChart();
-});
+const chartSeries = [
+  { name: "Budget", data: [10, 15, 12, 8, 11] },
+  { name: "Expenditure", data: [8, 7, 11, 9, 10] },
+];
+
+const recentTransactions = [
+  {
+    name: "Phone Store",
+    date: "6 May 2024, 10 AM",
+    amount: -899,
+    // icon: User,
+  },
+  {
+    name: "Shoe Store",
+    date: "7 May 2024, 8 PM",
+    amount: -1550,
+    // icon: User,
+  },
+  {
+    name: "Air Ticket",
+    date: "8 May 2024, 7 AM",
+    amount: -800,
+    // icon: User,
+  },
+  {
+    name: "Fund Payment",
+    date: "10 May 2024, 3 PM",
+    amount: 2120,
+    // icon: User,
+  },
+  {
+    name: "Top Up",
+    date: "11 May 2024, 1 PM",
+    amount: 1920,
+    // icon: User,
+  },
+];
+
+const payouts = [
+  {
+    name: "Electricity",
+    status: "Paid",
+    charges: "$5,985.56",
+    total: "$4,920.00",
+  },
+  {
+    name: "Water Costs",
+    status: "Pending",
+    charges: "$4,876.00",
+    total: "$4,498.00",
+  },
+  {
+    name: "Pay Tax",
+    status: "Paid",
+    charges: "$1,985.56",
+    total: "$1,978.00",
+  },
+];
+
+const tableColumns = [
+  { key: "name", label: "Name" },
+  { key: "status", label: "Status" },
+  { key: "charges", label: "Charges" },
+  { key: "total", label: "Total" },
+];
+
+const cards = [
+  {
+    title: "Assets",
+    value: "$58,463",
+    growth: "+23%",
+    growthType: "positive",
+  },
+  {
+    title: "Balance",
+    value: "$25,780",
+    growth: "+37%",
+    growthType: "positive",
+  },
+  {
+    title: "Income",
+    value: "$13,583",
+    growth: "+45%",
+    growthType: "positive",
+  },
+  {
+    title: "Expenditure",
+    value: "$8,921",
+    growth: "-27%",
+    growthType: "negative",
+  },
+];
 </script>

@@ -3,7 +3,7 @@
     <!-- Sidebar Toggle Button -->
     <button
       @click="toggleMobileSidebar"
-      class="bg-white text-main p-2 text-xl rounded md:hidden"
+      class="bg-[#E9E9E9] text-main p-2 text-xl rounded md:hidden"
     >
       ☰
     </button>
@@ -20,7 +20,7 @@
           <div class="flex items-center justify-between mb-4">
             <img
           src="../../assets/logo.png"
-          class="block h-8 w-10"
+          class="block"
           alt="hg"
         />
             <button
@@ -30,9 +30,9 @@
               ✖
             </button>
           </div>
-         <div class="flex flex-col justify-between h-full">
+         <div class="">
       <!-- Sidebar Header -->
-      <div class="space-y-">
+      <div class="flex flex-col justify-between h-[85vh]">
         <!-- Navigation Links -->
         <ul class="space-y-2 mt-4">
           <li
@@ -54,14 +54,14 @@
             </router-link>
           </li>
         </ul>
+        <div class="flex items-center cursor-pointer p-2 gap-2" @click="logout">
+          <img src="../../assets/logout.png" class="h-5 w-5" alt="" />
+          <h1 class="text-red-500 hover:text-red-600">Logout</h1>
+        </div>
       </div>
 
       <!-- Logout -->
 
-      <div class="flex items-center cursor-pointer" @click="logout">
-        <img src="../../assets/logout.png" class="h-5 w-5" alt="" />
-        <h1 class="p-2 text-red-500 hover:text-red-600">Logout</h1>
-      </div>
     </div>
         </div>
         
@@ -108,11 +108,11 @@ const navLinks = [
     name: "Transaction",
     icon: transaction, // Transaction Icon
   },
-  {
-    path: "/dashboard/insight",
-    name: "Insight",
-    icon: insight, // Insight Icon
-  },
+  // {
+  //   path: "/dashboard/insight",
+  //   name: "Insight",
+  //   icon: insight, // Insight Icon
+  // },
   {
     path: "/dashboard/profile",
     name: "Profile",

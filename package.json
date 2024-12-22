@@ -1,5 +1,5 @@
 {
-  "name": "zeta",
+  "name": "budgetly",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "apexcharts": "^4.3.0",
     "vue": "^3.5.13",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vue3-apexcharts": "^1.8.0"
   },
   "devDependencies": {
     "@heroicons/vue": "^2.2.0",

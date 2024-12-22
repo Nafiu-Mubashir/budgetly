@@ -1,10 +1,10 @@
 <template>
   <div class="relative overflow-scroll md:overflow-visible overflow-y-visible">
     <table
-      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg"
+      class="w-full min-h-[65vh text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg"
     >
       <!-- Table Header -->
-      <thead class="text-xs text-white uppercase font-semibold bg-main rounded-lg">
+      <thead class="text-xs text-white capitalize font-normal bg-main rounded-lg">
         <tr class="rounded-lg">
           <th
             v-for="column in columns"
@@ -48,7 +48,7 @@
   </div>
 
   <!-- Pagination Controls -->
-  <div class="flex justify-between items-center mt-4">
+  <!-- <div class="flex justify-between items-center mt-4">
     <button
       @click="prevPage"
       :disabled="currentPage === 1"
@@ -64,7 +64,41 @@
     >
       Next
     </button>
-  </div>
+  </div> -->
+
+   <!-- Pagination Controls -->
+    <div class="flex justify-between items-center mt-6">
+      <button
+        @click="prevPage"
+        :disabled="currentPage === 1"
+        class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+      >
+        Prev
+      </button>
+
+      <div class="flex space-x-2">
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="goToPage(page)"
+          class="px-3 py-1 rounded transition"
+          :class="[
+            'text-gray-500 hover:bg-main hover:text-white',
+            currentPage === page ? 'bg-main text-white' : 'bg-gray-100',
+          ]"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        @click="nextPage"
+        :disabled="currentPage === totalPages"
+        class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+      >
+        Next
+      </button>
+    </div>
 </template>
 
 <script setup>
@@ -81,6 +115,9 @@ const {
   rowsPerPage: { type: Number, default: 10 }, // Number of rows per page
 });
 
+const goToPage = (page) => {
+  currentPage.value = page;
+};
 // State for pagination
 const currentPage = ref(1);
 

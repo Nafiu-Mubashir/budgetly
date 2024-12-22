@@ -47,7 +47,7 @@
     <div class="flex justify-center items-center">
       <div class="hidden md:block">
         <img
-          src="../../../assets/login.jpg"
+          src="../../../assets/logins.jpg"
           alt="login image"
           class="h-[70%] w-[70%]"
         />

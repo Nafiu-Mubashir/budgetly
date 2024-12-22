@@ -5,82 +5,75 @@
     :title="modalTitle"
     @close="closeModal"
   >
-    <template v-if="modalTitle === 'Add New Budget'">
+    <template v-if="modalTitle === 'Add New Transaction'">
       <form @submit.prevent="handleCreate">
         <Input
-          v-model="budgetData.title"
+          v-model="transactionData.category"
           type="text"
-          placeholder="Budget Name"
+          placeholder="Transaction Name"
         />
         <Input
-          v-model="budgetData.total_amount"
+          v-model="transactionData.total_amount"
           type="number"
           placeholder="Total Amount"
         />
-        <select
-          
-          class="w-full p-2 border text-gray-500 rounded focus:outline-none border-main focus:shadow-sm focus:shadow-main"
-        >
-          <option selected disabled>Duration</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-          <option value="yearly">Yearly</option>
-        </select>
+         <Input
+          v-model="transactionData.narration"
+          type="text"
+          placeholder="Narration"
+        />
         <button type="submit" class="bg-main text-white px-4 py-2 rounded mt-4">
           Save
         </button>
       </form>
     </template>
 
-    <template v-else-if="modalTitle === 'Edit Budget'">
+    <template v-else-if="modalTitle === 'Edit Transaction'">
       <form @submit.prevent="handleEdit">
         <Input
-          v-model="budgetData.title"
+          v-model="transactionData.category"
           type="text"
-          placeholder="Budget Name"
+          placeholder="Transaction Name"
         />
         <Input
-          v-model="budgetData.total_amount"
-          type="number"
+          v-model="transactionData.total_amount"
+          type="text"
           placeholder="Total Amount"
         />
-        <select
-          v-model="budgetData.duration"
-          class="w-full p-2 border rounded focus:outline-none border-main focus:shadow-md focus:shadow-main"
-        >
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-          <option value="yearly">Yearly</option>
-        </select>
+          <Input
+          v-model="transactionData.narration"
+          type="text"
+          placeholder="Narration"
+        />
         <button type="submit" class="bg-main text-white px-4 py-2 rounded mt-4">
           Update
         </button>
       </form>
     </template>
 
-    <template v-else-if="modalTitle === 'View Budget'">
+    <template v-else-if="modalTitle === 'View Transaction'">
       <div
         class="p-3 flex flex-col md:flex-row justify-between md:text-center space-y-3 md:space-y-0"
       >
         <div class="flex-col">
           <label class="font-semibold">Title</label>
-          <p>{{ budgetData.title }}</p>
+          <p>{{ transactionData.category }}</p>
         </div>
         <div class="flex-col">
           <label class="font-semibold">Total Amount</label>
-          <p>{{ budgetData.total_amount }}</p>
+          <p>{{ transactionData.total_amount }}</p>
         </div>
         <div class="flex-col">
           <label class="font-semibold">Duration</label>
-          <p>{{ budgetData.duration }}</p>
+          <p>{{ transactionData.narration }}</p>
         </div>
       </div>
     </template>
 
-    <template v-else-if="modalTitle === 'Delete Budget'">
+    <template v-else-if="modalTitle === 'Delete Transaction'">
       <p class="md:p-3 mb-4 text-sm md:text-base">
-        Are you sure you want to delete budget:
-        <span class="text-main font-semibold">{{ budgetData.title }}</span
+        Are you sure you want to delete transaction:
+        <span class="text-main font-semibold">{{ transactionData.category }}</span
         >?
       </p>
       <div class="flex justify-between">
@@ -110,7 +103,7 @@ import Input from "../input/Input.vue";
 defineProps({
   isVisible: { type: Boolean, required: true },
   modalTitle: { type: String, required: true },
-  budgetData: { type: Object, required: true },
+  transactionData: { type: Object, required: true },
 });
 
 const emit = defineEmits(["close", "action"]);
@@ -122,37 +115,37 @@ const closeModal = () => {
 // Action Handlers
 const handleCreate = async () => {
   // try {
-  //   const response = await axios.post(BUDGET_API, budgetData);
-  //   console.log("Budget Created:", response.data);
+  //   const response = await axios.post(Transaction_API, transactionData);
+  //   console.log("Transaction Created:", response.data);
   //   emit("action", { type: "create", data: response.data });
   closeModal();
-  console.log(budgetData);
+  console.log(transactionData);
   // } catch (error) {
-  //   console.error("Error creating budget:", error.response?.data || error.message);
+  //   console.error("Error creating Transaction:", error.response?.data || error.message);
   // }
 };
 
 const handleEdit = async () => {
   // try {
-  //   const response = await axios.put(`${BUDGET_API}/${budgetData.id}`, budgetData);
-  //   console.log("Budget Updated:", response.data);
+  //   const response = await axios.put(`${Transaction_API}/${transactionData.id}`, transactionData);
+  //   console.log("Transaction Updated:", response.data);
   //   emit("action", { type: "edit", data: response.data });
-  console.log(budgetData);
+  console.log(transactionData);
 
   // closeModal();
   // } catch (error) {
-  //   console.error("Error updating budget:", error.response?.data || error.message);
+  //   console.error("Error updating Transaction:", error.response?.data || error.message);
   // }
 };
 
 const handleDelete = async () => {
   // try {
-  //   const response = await axios.delete(`${BUDGET_API}/${budgetData.id}`);
-  //   console.log("Budget Deleted:", response.data);
-  //   emit("action", { type: "delete", data: budgetData });
+  //   const response = await axios.delete(`${Transaction_API}/${transactionData.id}`);
+  //   console.log("Transaction Deleted:", response.data);
+  //   emit("action", { type: "delete", data: transactionData });
   closeModal();
   // } catch (error) {
-  //   console.error("Error deleting budget:", error.response?.data || error.message);
+  //   console.error("Error deleting Transaction:", error.response?.data || error.message);
   // }
 };
 </script>

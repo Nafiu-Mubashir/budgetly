@@ -1,12 +1,12 @@
 <template>
   <!-- Desktop Sidebar -->
   <aside
-    class="hidden md:block w-60 bg-secondary/20 text-black p-4 h-screen border-r"
+    class="hidden md:block w-60 bg-[#F5F5F5] text-black p-4 h-screen border-r"
   >
   <div class="flex flex-col justify-between h-full">
     <!-- Sidebar Header -->
     <div class="space-y-10">
-        <div class="border-b p-1.5">
+        <div class="">
           <img
           src="../../assets/logo.png"
           class="block"
@@ -81,11 +81,11 @@ const navLinks = [
     name: "Transaction",
     icon: transaction, // Transaction Icon
   },
-  {
-    path: "/dashboard/insight",
-    name: "Insight",
-    icon: insight, // Insight Icon
-  },
+  // {
+  //   path: "/dashboard/insight",
+  //   name: "Insight",
+  //   icon: insight, // Insight Icon
+  // },
   {
     path: "/dashboard/profile",
     name: "Profile",

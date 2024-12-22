@@ -51,9 +51,9 @@
     <div class="flex justify-center items-center">
       <div class="hidden md:block">
         <img
-          src="../../../assets/regs.png"
+          src="../../../assets/regs.jpg"
           alt="login image"
-          className="h-full w-[75%"
+          className="h-full w-[75%]"
         />
       </div>
     </div>

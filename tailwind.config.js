@@ -9,7 +9,7 @@ export default {
         'lg': '1024px',
       },
       colors: {
-        main: "#26C165",
+        main: "#57CF87",
         secondary: "#EBEBEB"
       },
       fontFamily: {

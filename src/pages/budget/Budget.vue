@@ -1,15 +1,15 @@
 <template>
-  <div class="md:w-[95%] mx-auto min-h-screen space-y-3">
+  <div class="md:w-[95%] mx-auto min-h-scree space-y-4">
     <section class="flex justify-between items-center">
       <h1 class="text-lg font-semibold">Budget</h1>
       <button
         @click="openModal('Add New Budget')"
-        class="bg-main text-white px-4 py-2 rounded"
+        class="bg-main text-white px-2 md:px-4 py-2 rounded text-sm md:text-base"
       >
         Add Budget
       </button>
     </section>
-    <div class="mt-5">
+    <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
       <Table :data="tableData" :columns="columns">
         <template #actions="{ row }">
           <Dropdown>
@@ -79,13 +79,15 @@ const tableData = [
     duration: "yearly",
   },
   { id: 5, title: "Gym", total_amount: "15000", duration: "monthly" },
+    { id: 6, title: "Clothing", total_amount: "30000", duration: "monthly" },
+  
 ];
 
 // Define columns for the table
 const columns = [
   { key: "id", label: "ID" },
   { key: "title", label: "Title" },
-  { key: "total_amount", label: "Total Amount" },
+  { key: "total_amount", label: "Total Amount ($)" },
   { key: "duration", label: "Duration" },
   { key: "actions", label: "Actions" },
 ];
