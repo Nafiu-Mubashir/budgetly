@@ -1,7 +1,7 @@
 <template>
   <div
     v-show="isVisible"
-    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+    class="inset-0 h-screen flex items-center justify-center z-50 top-[-16px] absolute bg-black bg-opacity-50"
   >
     <div
       class="bg-white rounded-lg shadow-lg w-[95%] md:w-full max-w-md p-6 space-y-4"
@@ -14,7 +14,7 @@
       <!-- Close Button -->
       <button
         @click="closeModal"
-        class=" text-red-500 hover:text-red-600"
+        class="block ml-auto text-red-500 hover:text-red-600"
       >
         ✖
       </button>

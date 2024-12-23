@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create an Axios instance
 const api = axios.create({
-    baseURL: "https://personal-finance-manager-v1ha.onrender.com/api/auth", // Replace with your API base URL
+    baseURL: "https://personal-finance-manager-v1ha.onrender.com/api", // Replace with your API base URL
     timeout: 10000, // Timeout after 10 seconds
 });
 

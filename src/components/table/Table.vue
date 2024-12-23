@@ -4,7 +4,9 @@
       class="w-full min-h-[65vh text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg"
     >
       <!-- Table Header -->
-      <thead class="text-xs text-white capitalize font-normal bg-main rounded-lg">
+      <thead
+        class="text-xs text-white capitalize font-normal bg-main rounded-lg"
+      >
         <tr class="rounded-lg">
           <th
             v-for="column in columns"
@@ -16,8 +18,17 @@
         </tr>
       </thead>
       <!-- Table Body -->
-      <tbody>
+      <tbody v-if="loading">
+        <tr>
+          <td :colspan="columns.length" class="text-center py-4 text-gray-500">
+            Loading data.....
+            <img src="@/assets/loader.png" class="h-44 w-44 block mx-auto mt-5 animate-pulse" alt="">
+          </td>
+        </tr>
+      </tbody>
+      <tbody v-else>
         <tr
+          v-if="data && data.length > 0"
           v-for="(row, rowIndex) in paginatedData"
           :key="rowIndex"
           class="bg-white border-b hover:bg-main/10 cursor-pointer"
@@ -38,9 +49,9 @@
           </td>
         </tr>
         <!-- Empty State -->
-        <tr v-if="data.length === 0">
+        <tr v-else>
           <td :colspan="columns.length" class="text-center py-4 text-gray-500">
-            No data available
+             <img src="@/assets/no-data.png" class="h-44 w-44 block mx-auto mt-5 animate-pulse" alt="">
           </td>
         </tr>
       </tbody>
@@ -66,39 +77,39 @@
     </button>
   </div> -->
 
-   <!-- Pagination Controls -->
-    <div class="flex justify-between items-center mt-6">
-      <button
-        @click="prevPage"
-        :disabled="currentPage === 1"
-        class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
-      >
-        Prev
-      </button>
+  <!-- Pagination Controls -->
+  <div class="flex justify-between items-center mt-6">
+    <button
+      @click="prevPage"
+      :disabled="currentPage === 1"
+      class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+    >
+      Prev
+    </button>
 
-      <div class="flex space-x-2">
-        <button
-          v-for="page in totalPages"
-          :key="page"
-          @click="goToPage(page)"
-          class="px-3 py-1 rounded transition"
-          :class="[
-            'text-gray-500 hover:bg-main hover:text-white',
-            currentPage === page ? 'bg-main text-white' : 'bg-gray-100',
-          ]"
-        >
-          {{ page }}
-        </button>
-      </div>
-
+    <div class="flex space-x-2">
       <button
-        @click="nextPage"
-        :disabled="currentPage === totalPages"
-        class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+        v-for="page in totalPages"
+        :key="page"
+        @click="goToPage(page)"
+        class="px-3 py-1 rounded transition"
+        :class="[
+          'text-gray-500 hover:bg-main hover:text-white',
+          currentPage === page ? 'bg-main text-white' : 'bg-gray-100',
+        ]"
       >
-        Next
+        {{ page }}
       </button>
     </div>
+
+    <button
+      @click="nextPage"
+      :disabled="currentPage === totalPages"
+      class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+    >
+      Next
+    </button>
+  </div>
 </template>
 
 <script setup>
@@ -110,9 +121,10 @@ const {
   columns,
   rowsPerPage = 10,
 } = defineProps({
-  data: { type: Array, required: true }, // The array of data to render
+  data: { type: Array, required: true, default: () => [] }, // The array of data to render
   columns: { type: Array, required: true }, // Array of column definitions
   rowsPerPage: { type: Number, default: 10 }, // Number of rows per page
+  loading: { type: Boolean, default: false },
 });
 
 const goToPage = (page) => {
@@ -128,7 +140,7 @@ const totalPages = computed(() => Math.ceil(data.length / rowsPerPage));
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  return data.slice(start, end);
+  return data?.slice(start, end) || [];
 });
 
 // Navigate to the previous page

@@ -13,7 +13,7 @@
         :id="id"
         :type="showPassword ? 'text' : type"
         :placeholder="placeholder"
-        class="w-full p-2 border rounded focus:outline-none border-main focus:shadow-sm focus:shadow-main placeholder:text-sm"
+        class="w-full p-2 py-3 border rounded focus:outline-none border-main focus:shadow-sm focus:shadow-main placeholder:text-sm"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
       />

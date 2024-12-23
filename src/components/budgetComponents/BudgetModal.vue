@@ -7,18 +7,14 @@
   >
     <template v-if="modalTitle === 'Add New Budget'">
       <form @submit.prevent="handleCreate">
+        <Input v-model="title" type="text" placeholder="Budget title" />
         <Input
-          v-model="budgetData.title"
-          type="text"
-          placeholder="Budget Name"
-        />
-        <Input
-          v-model="budgetData.total_amount"
+          v-model="total_amount"
           type="number"
           placeholder="Total Amount"
         />
         <select
-          
+          v-model="duration"
           class="w-full p-2 border text-gray-500 rounded focus:outline-none border-main focus:shadow-sm focus:shadow-main"
         >
           <option selected disabled>Duration</option>
@@ -26,8 +22,13 @@
           <option value="weekly">Weekly</option>
           <option value="yearly">Yearly</option>
         </select>
-        <button type="submit" class="bg-main text-white px-4 py-2 rounded mt-4">
-          Save
+        <button
+          type="submit"
+          class="bg-main text-white px-2 py-3 w-full rounded mt-4"
+          :disabled="loading"
+        >
+          <span v-if="!loading">Add</span>
+          <Spinner v-else />
         </button>
       </form>
     </template>
@@ -102,9 +103,12 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref } from "vue";
 import Modal from "@/components/modal/Modal.vue";
 import Input from "../input/Input.vue";
+import { useStore } from "vuex";
+import Spinner from "../spinner/Spinner.vue";
+import { toast } from "vue3-toastify";
 
 // Props passed into the modal
 defineProps({
@@ -114,22 +118,47 @@ defineProps({
 });
 
 const emit = defineEmits(["close", "action"]);
+const loading = ref(false);
+const store = useStore();
 
 const closeModal = () => {
   emit("close");
 };
-
+const title = ref("");
+const total_amount = ref("");
+const duration = ref("");
 // Action Handlers
 const handleCreate = async () => {
-  // try {
-  //   const response = await axios.post(BUDGET_API, budgetData);
-  //   console.log("Budget Created:", response.data);
-  //   emit("action", { type: "create", data: response.data });
-  closeModal();
-  console.log(budgetData);
-  // } catch (error) {
-  //   console.error("Error creating budget:", error.response?.data || error.message);
-  // }
+  loading.value = true;
+  console.log({
+    title: title.value,
+    total_amount: total_amount.value,
+    duration: duration.value,
+  });
+
+  try {
+    const response = await store.dispatch("budget/createBudget", {
+      title: title.value,
+      totalAmount: total_amount.value,
+      duration: duration.value,
+    });
+    if (response.statusCode === "201") {
+      toast.success("Budget added successfully");
+      closeModal();
+    } else {
+      toast.error(response.error);
+    }
+    console.log("Budget Created:", response);
+    emit("action", { type: "create", data: response.data });
+  } catch (error) {
+     toast.error(response.error);
+    console.error(
+      "Error creating budget:",
+      error.response?.data || error.message
+    );
+  } finally {
+    loading.value = false; // Hide the spinner
+  }
 };
 
 const handleEdit = async () => {

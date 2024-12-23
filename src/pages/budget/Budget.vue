@@ -9,8 +9,11 @@
         Add Budget
       </button>
     </section>
+    <!-- <div v-if="loading" class="mt-5 text-center">
+      Loading budgets...
+    </div> -->
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
-      <Table :data="tableData" :columns="columns">
+      <Table :data="BUDGETS" :columns="columns" :loading="loading">
         <template #actions="{ row }">
           <Dropdown>
             <ul class="py-1">
@@ -57,30 +60,24 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
 import BudgetModal from "@/components/budgetComponents/BudgetModal.vue";
+import { useStore } from "vuex";
 
+const loading = ref(true);
+const store = useStore();
 // Define reactive variables for modal state
 const isModalVisible = ref(false);
 const modalTitle = ref(""); // Define modalTitle as a reactive variable
 const budgetData = ref({});
+const BUDGETS = computed(() => store.getters["budget/budgets"]);
+console.log("This is the budget array: ", BUDGETS);
 
 // Example data for the table
 const tableData = [
-  { id: 1, title: "Food", total_amount: "30000", duration: "monthly" },
-  { id: 2, title: "Fuel", total_amount: "20000", duration: "weekly" },
-  { id: 3, title: "House Rent", total_amount: "350000", duration: "yearly" },
-  {
-    id: 4,
-    title: "Router Subscription",
-    total_amount: "100000",
-    duration: "yearly",
-  },
-  { id: 5, title: "Gym", total_amount: "15000", duration: "monthly" },
-    { id: 6, title: "Clothing", total_amount: "30000", duration: "monthly" },
-  
+ 
 ];
 
 // Define columns for the table
@@ -116,6 +113,19 @@ const handleModalAction = ({ type, data }) => {
   }
   closeModal(); // Close the modal after the action
 };
+
+// Fetch budgets on component mount
+const fetchBudgets = async () => {
+  try {
+    await store.dispatch("budget/fetchBudgets");
+  } catch (error) {
+    console.error("Error fetching budgets:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchBudgets);
 </script>
 
 <!-- <style scoped>

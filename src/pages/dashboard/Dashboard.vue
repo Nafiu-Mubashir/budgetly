@@ -87,6 +87,8 @@ import DashBudgetCard from "@/components/cards/DashBudgetCard.vue";
 import Table from "@/components/table/Table.vue";
 import User from "@/assets/profile.png"
 
+
+
 const chartOptions = {
   chart: { id: "financial-statistics", toolbar: { show: false } },
   xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May"] },

@@ -49,7 +49,7 @@
           alt="user"
         />
         <div>
-          <h2 class="text-xs">Mubashir N.</h2>
+          <h2 class="text-xs">{{username}}</h2>
           <p class="text-xs">Online</p>
         </div>
       </div>
@@ -61,8 +61,11 @@
 import MobileSidebar from "../sidebar/MobileSidebar.vue";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
+import { useStore } from "vuex";
 
 const route = useRoute();
+const store = useStore()
+const username = store.getters["auth/user"]
 
 // Mapping route paths to titles
 const pageTitles = {

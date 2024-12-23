@@ -77,7 +77,7 @@
         :class="[
           'text-sm font-medium mt-1 w-12 text-center rounded-lg p-.5',
           growthType === 'positive'
-            ? 'bg-main/30 text-main'
+            ? 'bg-main/30 text-black'
             : 'bg-red-200 text-red-500',
         ]"
       >
