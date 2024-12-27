@@ -76,7 +76,7 @@ const BUDGETS = computed(() => store.getters["budget/budgets"]);
 
 // Define columns for the table
 const columns = [
-  { key: "id", label: "S/N" },
+  // { key: "id", label: "S/N" },
   { key: "title", label: "Title" },
   { key: "total_amount", label: "Total Amount ($)" },
   { key: "duration", label: "Duration" },

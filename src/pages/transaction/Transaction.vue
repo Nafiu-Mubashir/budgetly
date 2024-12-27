@@ -75,7 +75,7 @@ const transactionData = ref({});
 const transactions = computed(() => store.getters["transaction/transactions"]);
 
 const columns = [
-  { key: "id", label: "S/N" },
+  // { key: "id", label: "S/N" },
   { key: "narration", label: "narration" },
   { key: "amount", label: "Total Amount ($)" },
   { key: "category", label: "category" },
