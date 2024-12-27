@@ -5,16 +5,23 @@
     :title="modalTitle"
     @close="closeModal"
   >
-    <template v-if="modalTitle === 'Add New Budget'">
-      <form @submit.prevent="handleCreate">
-        <Input v-model="title" type="text" placeholder="Budget title" />
+    <!-- Add or Edit Budget -->
+    <template
+      v-if="modalTitle === 'Add New Budget' || modalTitle === 'Edit Budget'"
+    >
+      <form @submit.prevent="submitForm">
         <Input
-          v-model="total_amount"
+          v-model="formData.title"
+          type="text"
+          placeholder="Budget title"
+        />
+        <Input
+          v-model="formData.total_amount"
           type="number"
           placeholder="Total Amount"
         />
         <select
-          v-model="duration"
+          v-model="formData.duration"
           class="w-full p-2 border text-gray-500 rounded focus:outline-none border-main focus:shadow-sm focus:shadow-main"
         >
           <option selected disabled>Duration</option>
@@ -27,161 +34,148 @@
           class="bg-main text-white px-2 py-3 w-full rounded mt-4"
           :disabled="loading"
         >
-          <span v-if="!loading">Add</span>
+          <span v-if="!loading">{{
+            modalTitle === "Add New Budget" ? "Add" : "Update"
+          }}</span>
           <Spinner v-else />
         </button>
       </form>
     </template>
 
-    <template v-else-if="modalTitle === 'Edit Budget'">
-      <form @submit.prevent="handleEdit">
-        <Input
-          v-model="budgetData.title"
-          type="text"
-          placeholder="Budget Name"
-        />
-        <Input
-          v-model="budgetData.total_amount"
-          type="number"
-          placeholder="Total Amount"
-        />
-        <select
-          v-model="budgetData.duration"
-          class="w-full p-2 border rounded focus:outline-none border-main focus:shadow-md focus:shadow-main"
-        >
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-        <button type="submit" class="bg-main text-white px-4 py-2 rounded mt-4">
-          Update
-        </button>
-      </form>
-    </template>
-
+    <!-- View Budget -->
     <template v-else-if="modalTitle === 'View Budget'">
-      <div
-        class="p-3 flex flex-col md:flex-row justify-between md:text-center space-y-3 md:space-y-0"
-      >
+      <div class="p-3 flex flex-col space-y-3">
         <div class="flex-col">
-          <label class="font-semibold">Title</label>
-          <p>{{ budgetData.title }}</p>
+          <label class="font-semibold text-sm">Title</label>
+          <p class="text-sm">{{ budgetData.title }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold">Total Amount</label>
-          <p>{{ budgetData.total_amount }}</p>
+          <label class="font-semibold text-sm">Amount</label>
+          <p class="text-sm">{{ commaformatter(budgetData.total_amount) }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold">Duration</label>
-          <p>{{ budgetData.duration }}</p>
+          <label class="font-semibold text-sm">Duration</label>
+          <p class="text-sm">{{ budgetData.duration }}</p>
+        </div>
+        <div class="flex-col">
+          <label class="font-semibold text-sm">Date Created</label>
+          <p class="text-sm">{{ shortDateFormatter(budgetData.created_at) }}</p>
+        </div>
+        <div class="flex-col">
+          <label class="font-semibold text-sm">Time</label>
+          <p class="text-sm">
+            {{ timeFormatter(budgetData.created_at, true) }}
+          </p>
         </div>
       </div>
     </template>
 
+    <!-- Delete Budget -->
     <template v-else-if="modalTitle === 'Delete Budget'">
-      <p class="md:p-3 mb-4 text-sm md:text-base">
-        Are you sure you want to delete budget:
-        <span class="text-main font-semibold">{{ budgetData.title }}</span
-        >?
-      </p>
-      <div class="flex justify-between">
-        <button
-          @click="handleDelete"
-          class="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Yes
-        </button>
-        <button
-          @click="closeModal"
-          class="bg-gray-500 text-white px-4 py-2 rounded"
-        >
-          No
-        </button>
+      <div class="space-y-4">
+        <p class="mb-4 text-sm md:text-sm text-center">
+          Are you sure you want to delete budget:
+          <span class="text-main font-semibold capitalize">{{ budgetData.title }}</span
+          >?
+        </p>
+        <div class="flex justify-between">
+          <button
+            @click="handleDelete"
+            class="bg-red-500 text-white px-4 py-2 rounded"
+          >
+            Yes
+          </button>
+          <button
+            @click="closeModal"
+            class="bg-gray-500 text-white px-4 py-2 rounded"
+          >
+            No
+          </button>
+        </div>
       </div>
     </template>
   </Modal>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref } from "vue";
+import { defineProps, defineEmits, ref, onMounted } from "vue";
 import Modal from "@/components/modal/Modal.vue";
 import Input from "../input/Input.vue";
-import { useStore } from "vuex";
 import Spinner from "../spinner/Spinner.vue";
+import { useStore } from "vuex";
 import { toast } from "vue3-toastify";
+import {
+  commaformatter,
+  shortDateFormatter,
+  timeFormatter,
+} from "@/utils/formatter";
 
 // Props passed into the modal
-defineProps({
+const { budgetData, modalTitle } = defineProps({
   isVisible: { type: Boolean, required: true },
   modalTitle: { type: String, required: true },
   budgetData: { type: Object, required: true },
 });
 
 const emit = defineEmits(["close", "action"]);
-const loading = ref(false);
+console.log(budgetData.id);
+
 const store = useStore();
+const loading = ref(false);
+
+// Reuse the same form data for create and edit
+const formData = ref({ ...budgetData });
 
 const closeModal = () => {
   emit("close");
 };
-const title = ref("");
-const total_amount = ref("");
-const duration = ref("");
-// Action Handlers
-const handleCreate = async () => {
+
+// Submit form for both create and edit
+const submitForm = async () => {
   loading.value = true;
-  console.log({
-    title: title.value,
-    total_amount: total_amount.value,
-    duration: duration.value,
-  });
 
   try {
-    const response = await store.dispatch("budget/createBudget", {
-      title: title.value,
-      totalAmount: total_amount.value,
-      duration: duration.value,
-    });
-    if (response.statusCode === "201") {
-      toast.success("Budget added successfully");
-      closeModal();
-    } else {
-      toast.error(response.error);
+    let response;
+
+    if (modalTitle === "Add New Budget") {
+      // Create Budget
+      response = await store.dispatch("budget/createBudget", formData.value);
+      toast.success("Budget added successfully!");
+    } else if (modalTitle === "Edit Budget") {
+      // Edit Budget
+      response = await store.dispatch("budget/updateBudget", {
+        id: formData.value.id,
+        data: formData.value,
+      });
+      toast.success("Budget updated successfully!");
     }
-    console.log("Budget Created:", response);
-    emit("action", { type: "create", data: response.data });
+
+    // emit("action", { type: modalTitle, data: response.data });
+    closeModal();
   } catch (error) {
-     toast.error(response.error);
-    console.error(
-      "Error creating budget:",
-      error.response?.data || error.message
-    );
+    toast.error("An error occurred. Please try again.");
+    console.error(error);
   } finally {
-    loading.value = false; // Hide the spinner
+    await store.dispatch("budget/fetchBudgets");
+    loading.value = false;
   }
 };
 
-const handleEdit = async () => {
-  // try {
-  //   const response = await axios.put(`${BUDGET_API}/${budgetData.id}`, budgetData);
-  //   console.log("Budget Updated:", response.data);
-  //   emit("action", { type: "edit", data: response.data });
-  console.log(budgetData);
-
-  // closeModal();
-  // } catch (error) {
-  //   console.error("Error updating budget:", error.response?.data || error.message);
-  // }
-};
-
+// Handle delete action
 const handleDelete = async () => {
-  // try {
-  //   const response = await axios.delete(`${BUDGET_API}/${budgetData.id}`);
-  //   console.log("Budget Deleted:", response.data);
-  //   emit("action", { type: "delete", data: budgetData });
-  closeModal();
-  // } catch (error) {
-  //   console.error("Error deleting budget:", error.response?.data || error.message);
-  // }
+  loading.value = true;
+
+  try {
+    await store.dispatch("budget/deleteBudget", budgetData.id);
+    toast.success("Budget deleted successfully!");
+    // emit("action", { type: "delete", id: budgetData.id });
+    closeModal();
+  } catch (error) {
+    toast.error("An error occurred. Please try again.");
+    console.error(error);
+  } finally {
+    await store.dispatch("budget/fetchBudgets");
+    loading.value = false;
+  }
 };
 </script>

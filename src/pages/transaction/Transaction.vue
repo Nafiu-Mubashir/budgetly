@@ -13,7 +13,7 @@
     </section>
 
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
-      <Table :data="tableData" :columns="columns">
+      <Table :data="transactions" :columns="columns" :loading="loading" filter="true" filterKey="category">
         <template #actions="{ row }">
           <Dropdown>
             <ul class="py-1">
@@ -60,40 +60,24 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import CreateTransaction from "@/components/transactionComponents/CreateTransaction.vue";
+import { ref, computed, onMounted } from "vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
 import TransactionModal from "@/components/transactionComponents/TransactionModal.vue";
+import { useStore } from "vuex";
 
+const loading = ref(false);
+const store = useStore();
 // Define reactive variables for modal state
 const isModalVisible = ref(false);
 const modalTitle = ref(""); // Define modalTitle as a reactive variable
 const transactionData = ref({});
-
-const tableData = [
-  { id: 1, category: "Debit", total_amount: "30,000", narration: "Food Items" },
-  { id: 2, category: "Debit", total_amount: "20,000", narration: "Fuel" },
-  { id: 3, category: "Debit", total_amount: "35,000", narration: "House Rent" },
-  {
-    id: 4,
-    category: "Debit",
-    total_amount: "100,000",
-    narration: "Subscription Fee",
-  },
-  {
-    id: 5,
-    category: "Debit",
-    total_amount: "15,000",
-    narration: "Gym Payment",
-  },
-  { id: 6, category: "Credit", total_amount: "1,000,000", narration: "Salary" },
-];
+const transactions = computed(() => store.getters["transaction/transactions"]);
 
 const columns = [
-  { key: "id", label: "ID" },
+  { key: "id", label: "S/N" },
   { key: "narration", label: "narration" },
-  { key: "total_amount", label: "Total Amount ($)" },
+  { key: "amount", label: "Total Amount ($)" },
   { key: "category", label: "category" },
   { key: "actions", label: "Actions" },
 ];
@@ -112,14 +96,28 @@ const closeModal = () => {
 
 // Handle actions from the modal (e.g., create, edit, delete)
 const handleModalAction = ({ type, data }) => {
-  console.log(`Action: ${type}`, data);
+  
   if (type === "create") {
-    console.log("Creating Transaction:", data);
+    return data;
   } else if (type === "edit") {
-    console.log("Editing Transaction:", data);
+    return data;
   } else if (type === "delete") {
-    console.log("Deleting Transaction:", data.id);
+    return data.id;
   }
   closeModal(); // Close the modal after the action
 };
+
+// Fetch budgets on component mount
+const fetchTransactions = async () => {
+  loading.value = true;
+  try {
+    await store.dispatch("transaction/fetchTransactions");
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchTransactions);
 </script>

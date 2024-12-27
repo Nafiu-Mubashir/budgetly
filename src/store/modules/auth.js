@@ -54,10 +54,8 @@ export default {
                 const response = await api.get(`/auth/user/${state.email}`, {
                     headers: { Authorization: `Bearer ${state.token}` }, // Include token for secure request
                 });
-                console.log(response.user);
-                
-                commit("SET_USER", response.user.username);
-                return response.data;
+             commit("SET_USER", response.user.username);
+                return response.user;
             } catch (error) {
                 throw error;
             }

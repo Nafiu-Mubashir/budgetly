@@ -6,19 +6,19 @@
     <div
       class="bg-white rounded-lg shadow-lg w-[95%] md:w-full max-w-md p-6 space-y-4"
     >
-    <div class="flex justify-between items-center">
-      <!-- Modal Header -->
-    <header v-if="title" class="mb-">
-      <h2 class="text-base font-bold">{{ title }}</h2>
-    </header>
-      <!-- Close Button -->
-      <button
-        @click="closeModal"
-        class="block ml-auto text-red-500 hover:text-red-600"
-      >
-        ✖
-      </button>
-    </div>
+      <div class="flex justify-between items-center">
+        <!-- Modal Header -->
+        <header v-if="title">
+          <h2 class="text-base font-bold">{{ title }}</h2>
+        </header>
+        <!-- Close Button -->
+        <button
+          @click="closeModal"
+          class="block ml-auto text-red-500 hover:text-red-600"
+        >
+          ✖
+        </button>
+      </div>
       <!-- Modal Body -->
       <div>
         <slot></slot>
@@ -32,15 +32,17 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref, onMounted, onUnmounted } from "vue";
 
-defineProps({
+// Props passed into the modal
+const props = defineProps({
   isVisible: { type: Boolean, required: true }, // Visibility state of the modal
   title: { type: String, default: "" }, // Optional title
 });
 
 const emit = defineEmits(["close"]);
 
+// Close the modal by emitting the close event
 const closeModal = () => {
   emit("close");
 };
@@ -48,7 +50,7 @@ const closeModal = () => {
 
 <style scoped>
 /* Optional animations for the modal */
-[ v-cloak ] {
+[v-cloak] {
   display: none;
 }
 </style>

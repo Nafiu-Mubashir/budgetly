@@ -4,10 +4,14 @@ export default {
     namespaced: true,
     state: {
         budgets: [], // Centralized budget data
+        singleBudget: {},
     },
     mutations: {
         SET_BUDGETS(state, budgets) {
             state.budgets = budgets;
+        },
+        SET_SINGLE_BUDGET(state, singleBudget) {
+            state.singleBudget = singleBudget;
         },
         ADD_BUDGET(state, budget) {
             state.budgets.push(budget);
@@ -28,6 +32,17 @@ export default {
                 const response = await api.get("/budgets");
                 commit("SET_BUDGETS", response.budgets);
                 return response.budgets;
+            } catch (error) {
+                throw error;
+            }
+        },
+        async fetchSingleBudget({ commit }, budgetId) {
+            try {
+                const response = await api.get(`/budgets/${budgetId}`);
+                console.log(response);
+
+                commit("SET_SINGLE_BUDGET", response.budget);
+                return response.budget;
             } catch (error) {
                 throw error;
             }
@@ -61,5 +76,6 @@ export default {
     },
     getters: {
         budgets: (state) => state.budgets,
+        singleBudget: (state) => state.singleBudget
     },
 };

@@ -38,14 +38,14 @@ api.interceptors.response.use(
                 window.location.href = "/login";
             } else if (error.response.status === 500) {
                 // Internal Server Error: Show a generic error message
-                console.log("Something went wrong. Please try again later.");
+                console.error("Something went wrong. Please try again later.");
             }
         } else if (error.request) {
             // No response from server
-            console.log("No response from server. Please check your network.");
+            console.error("No response from server. Please check your network.");
         } else {
             // Other errors
-            console.log("An error occurred: " + error.message);
+            console.error("An error occurred: " + error.message);
         }
 
         return Promise.reject(error);

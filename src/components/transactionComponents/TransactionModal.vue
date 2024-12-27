@@ -5,147 +5,178 @@
     :title="modalTitle"
     @close="closeModal"
   >
-    <template v-if="modalTitle === 'Add New Transaction'">
-      <form @submit.prevent="handleCreate">
+    <!-- Add or Edit Transaction -->
+    <template
+      v-if="
+        modalTitle === 'Add New Transaction' ||
+        modalTitle === 'Edit Transaction'
+      "
+    >
+      <form @submit.prevent="submitForm">
         <Input
-          v-model="transactionData.category"
+          v-model="formData.narration"
           type="text"
-          placeholder="Transaction Name"
+          placeholder="Transaction narration"
         />
         <Input
-          v-model="transactionData.total_amount"
+          v-model="formData.amount"
           type="number"
           placeholder="Total Amount"
         />
-         <Input
-          v-model="transactionData.narration"
-          type="text"
-          placeholder="Narration"
-        />
-        <button type="submit" class="bg-main text-white px-4 py-2 rounded mt-4">
-          Save
+        <button
+          type="submit"
+          class="bg-main text-white px-2 py-3 w-full rounded mt-4"
+          :disabled="loading"
+        >
+          <span v-if="!loading">{{
+            modalTitle === "Add New Transaction" ? "Add" : "Update"
+          }}</span>
+          <Spinner v-else />
         </button>
       </form>
     </template>
 
-    <template v-else-if="modalTitle === 'Edit Transaction'">
-      <form @submit.prevent="handleEdit">
-        <Input
-          v-model="transactionData.category"
-          type="text"
-          placeholder="Transaction Name"
-        />
-        <Input
-          v-model="transactionData.total_amount"
-          type="text"
-          placeholder="Total Amount"
-        />
-          <Input
-          v-model="transactionData.narration"
-          type="text"
-          placeholder="Narration"
-        />
-        <button type="submit" class="bg-main text-white px-4 py-2 rounded mt-4">
-          Update
-        </button>
-      </form>
-    </template>
-
+    <!-- View Transaction -->
     <template v-else-if="modalTitle === 'View Transaction'">
-      <div
-        class="p-3 flex flex-col md:flex-row justify-between md:text-center space-y-3 md:space-y-0"
-      >
+      <div class="p-3 flex flex-col space-y-3">
         <div class="flex-col">
-          <label class="font-semibold">Title</label>
-          <p>{{ transactionData.category }}</p>
+          <label class="font-semibold text-sm">Narration</label>
+          <p class="text-sm">{{ transactionData.narration }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold">Total Amount</label>
-          <p>{{ transactionData.total_amount }}</p>
+          <label class="font-semibold text-sm">Amount</label>
+          <p class="text-sm">{{ commaformatter(transactionData.amount) }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold">Duration</label>
-          <p>{{ transactionData.narration }}</p>
+          <label class="font-semibold text-sm">Duration</label>
+          <p class="text-sm">{{ transactionData.category }}</p>
+        </div>
+        <div class="flex-col">
+          <label class="font-semibold text-sm">Date Created</label>
+          <p class="text-sm">
+            {{ shortDateFormatter(transactionData.created_at) }}
+          </p>
+        </div>
+        <div class="flex-col">
+          <label class="font-semibold text-sm">Time</label>
+          <p class="text-sm">
+            {{ timeFormatter(transactionData.created_at, true) }}
+          </p>
         </div>
       </div>
     </template>
 
+    <!-- Delete Transaction -->
     <template v-else-if="modalTitle === 'Delete Transaction'">
-      <p class="md:p-3 mb-4 text-sm md:text-base">
-        Are you sure you want to delete transaction:
-        <span class="text-main font-semibold">{{ transactionData.category }}</span
-        >?
-      </p>
-      <div class="flex justify-between">
-        <button
-          @click="handleDelete"
-          class="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Yes
-        </button>
-        <button
-          @click="closeModal"
-          class="bg-gray-500 text-white px-4 py-2 rounded"
-        >
-          No
-        </button>
+      <div class="space-y-4">
+        <p class="mb-4 text-sm md:text-sm text-center">
+          Are you sure you want to delete transaction:
+          <span class="text-main font-semibold capitalize">{{
+            transactionData.narration
+          }}</span
+          >?
+        </p>
+        <div class="flex justify-between">
+          <button
+            @click="handleDelete"
+            class="bg-red-500 text-white px-4 py-2 rounded"
+          >
+            Yes
+          </button>
+          <button
+            @click="closeModal"
+            class="bg-gray-500 text-white px-4 py-2 rounded"
+          >
+            No
+          </button>
+        </div>
       </div>
     </template>
   </Modal>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref, onMounted } from "vue";
 import Modal from "@/components/modal/Modal.vue";
 import Input from "../input/Input.vue";
+import Spinner from "../spinner/Spinner.vue";
+import { useStore } from "vuex";
+import { toast } from "vue3-toastify";
+import {
+  commaformatter,
+  shortDateFormatter,
+  timeFormatter,
+} from "@/utils/formatter";
 
 // Props passed into the modal
-defineProps({
+const { transactionData, modalTitle } = defineProps({
   isVisible: { type: Boolean, required: true },
   modalTitle: { type: String, required: true },
   transactionData: { type: Object, required: true },
 });
 
 const emit = defineEmits(["close", "action"]);
+console.log(transactionData.id);
+
+const store = useStore();
+const loading = ref(false);
+
+// Reuse the same form data for create and edit
+const formData = ref({ ...transactionData });
 
 const closeModal = () => {
   emit("close");
 };
 
-// Action Handlers
-const handleCreate = async () => {
-  // try {
-  //   const response = await axios.post(Transaction_API, transactionData);
-  //   console.log("Transaction Created:", response.data);
-  //   emit("action", { type: "create", data: response.data });
-  closeModal();
-  console.log(transactionData);
-  // } catch (error) {
-  //   console.error("Error creating Transaction:", error.response?.data || error.message);
-  // }
+// Submit form for both create and edit
+const submitForm = async () => {
+  loading.value = true;
+
+  try {
+    let response;
+
+    if (modalTitle === "Add New Transaction") {
+      // Create Transaction
+      response = await store.dispatch(
+        "transaction/createTransaction",
+        formData.value
+      );
+      toast.success("Transaction added successfully!");
+    } else if (modalTitle === "Edit Transaction") {
+      // Edit Transaction
+      response = await store.dispatch("transaction/updateTransaction", {
+        id: formData.value.id,
+        data: formData.value,
+      });
+      toast.success("Transaction updated successfully!");
+    }
+
+    // emit("action", { type: modalTitle, data: response.data });
+    closeModal();
+  } catch (error) {
+    toast.error("An error occurred. Please try again.");
+    console.error(error);
+  } finally {
+    await store.dispatch("transaction/fetchTransactions")
+    loading.value = false;
+  }
 };
 
-const handleEdit = async () => {
-  // try {
-  //   const response = await axios.put(`${Transaction_API}/${transactionData.id}`, transactionData);
-  //   console.log("Transaction Updated:", response.data);
-  //   emit("action", { type: "edit", data: response.data });
-  console.log(transactionData);
-
-  // closeModal();
-  // } catch (error) {
-  //   console.error("Error updating Transaction:", error.response?.data || error.message);
-  // }
-};
-
+// Handle delete action
 const handleDelete = async () => {
-  // try {
-  //   const response = await axios.delete(`${Transaction_API}/${transactionData.id}`);
-  //   console.log("Transaction Deleted:", response.data);
-  //   emit("action", { type: "delete", data: transactionData });
-  closeModal();
-  // } catch (error) {
-  //   console.error("Error deleting Transaction:", error.response?.data || error.message);
-  // }
+  loading.value = true;
+
+  try {
+    await store.dispatch("transaction/deleteTransaction", transactionData.id);
+    toast.success("Transaction deleted successfully!");
+    // emit("action", { type: "delete", id: transactionData.id });
+    closeModal();
+  } catch (error) {
+    toast.error("An error occurred. Please try again.");
+    console.error(error);
+  } finally {
+    await store.dispatch("transaction/fetchTransactions")
+    loading.value = false;
+  }
 };
 </script>

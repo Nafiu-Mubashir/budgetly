@@ -17,37 +17,19 @@
           <div
             class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
           >
-            <svg
-              class="w-3 h-3 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
+             <Search color="#AFB4BD" size="28" class="absolute start-0 flex items-center ps-3 pointer-events-none"/>
           </div>
           <input
             type="search"
             id="default-search"
-            class="block w-full p-2 ps-8 text-sm text-gray-900 border border-main rounded-full bg-[#E9E9E9] focus:ring-main focus:border-main focus:outline-none placeholder:text-sm"
+            class="block w-full p-1.5 ps-8 text-sm text-gray-900 border border-main rounded-full bg-[#E9E9E9] focus:ring-main focus:border-main focus:outline-none placeholder:text-sm"
             placeholder="Search..."
             required
           />
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <img
-          src="../../assets/profile.png"
-          class="h-6 md:h-10 w-6 md:w-10"
-          alt="user"
-        />
+       <CircleUser strokeWidth={1} size="32" />
         <div>
           <h2 class="text-xs">{{username}}</h2>
           <p class="text-xs">Online</p>
@@ -62,6 +44,7 @@ import MobileSidebar from "../sidebar/MobileSidebar.vue";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { CircleUser, Search } from "lucide-vue-next";
 
 const route = useRoute();
 const store = useStore()

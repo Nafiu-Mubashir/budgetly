@@ -1,5 +1,13 @@
 <template>
   <div class="relative overflow-scroll md:overflow-visible overflow-y-visible">
+    <!-- Conditionally Render Filter Input -->
+    <div v-if="filter" class="mb-4 w-[30%] ml-auto">
+      <Input
+        v-model="filterText"
+        type="text"
+        placeholder="Filter by category"
+      />
+    </div>
     <table
       class="w-full min-h-[65vh text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg"
     >
@@ -8,6 +16,8 @@
         class="text-xs text-white capitalize font-normal bg-main rounded-lg"
       >
         <tr class="rounded-lg">
+          <th class="px-4 py-3 whitespace-nowrap">S/N</th>
+          <!-- Serial Number Column -->
           <th
             v-for="column in columns"
             :key="column.key"
@@ -20,29 +30,38 @@
       <!-- Table Body -->
       <tbody v-if="loading">
         <tr>
-          <td :colspan="columns.length" class="text-center py-4 text-gray-500">
+          <td
+            :colspan="columns.length + 1"
+            class="text-center py-4 text-gray-500"
+          >
             Loading data.....
-            <img src="@/assets/loader.png" class="h-44 w-44 block mx-auto mt-5 animate-pulse" alt="">
+            <img
+              src="@/assets/loader.png"
+              class="h-44 w-44 block mx-auto mt-5 animate-pulse"
+              alt=""
+            />
           </td>
         </tr>
       </tbody>
       <tbody v-else>
         <tr
-          v-if="data && data.length > 0"
+          v-if="filteredData.length > 0"
           v-for="(row, rowIndex) in paginatedData"
           :key="rowIndex"
           class="bg-white border-b hover:bg-main/10 cursor-pointer"
         >
+          <!-- Serial Number -->
+          <td class="px-4 py-2 whitespace-nowrap">
+            {{ (currentPage - 1) * rowsPerPage + rowIndex + 1 }}
+          </td>
           <td
             v-for="column in columns"
             :key="column.key"
             class="px-4 py-2 whitespace-nowrap"
           >
-            <!-- Check if the column is 'actions', use slot -->
             <template v-if="column.key === 'actions'">
               <slot name="actions" :row="row" :id="row.id" />
             </template>
-            <!-- Default rendering for other columns -->
             <template v-else>
               {{ resolveCell(row, column.key) }}
             </template>
@@ -50,32 +69,20 @@
         </tr>
         <!-- Empty State -->
         <tr v-else>
-          <td :colspan="columns.length" class="text-center py-4 text-gray-500">
-             <img src="@/assets/no-data.png" class="h-44 w-44 block mx-auto mt-5 animate-pulse" alt="">
+          <td
+            :colspan="columns.length + 1"
+            class="text-center py-4 text-gray-500"
+          >
+            <img
+              src="@/assets/no-data.png"
+              class="h-44 w-44 block mx-auto mt-5 animate-pulse"
+              alt=""
+            />
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-
-  <!-- Pagination Controls -->
-  <!-- <div class="flex justify-between items-center mt-4">
-    <button
-      @click="prevPage"
-      :disabled="currentPage === 1"
-      class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50 text-sm"
-    >
-      Previous
-    </button>
-    <p class="text-sm">Page {{ currentPage }} of {{ totalPages }}</p>
-    <button
-      @click="nextPage"
-      :disabled="currentPage === totalPages"
-      class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50 text-sm"
-    >
-      Next
-    </button>
-  </div> -->
 
   <!-- Pagination Controls -->
   <div class="flex justify-between items-center mt-6">
@@ -114,33 +121,53 @@
 
 <script setup>
 import { defineProps, computed, ref } from "vue";
+import Input from "../input/Input.vue";
 
 // Destructure props and extract rowsPerPage
 const {
   data,
   columns,
   rowsPerPage = 10,
+  filter = false, // Enable or disable filtering
+  filterKey = "", // Key to filter by
 } = defineProps({
-  data: { type: Array, required: true, default: () => [] }, // The array of data to render
-  columns: { type: Array, required: true }, // Array of column definitions
-  rowsPerPage: { type: Number, default: 10 }, // Number of rows per page
+  data: { type: Array, required: true, default: () => [] },
+  columns: { type: Array, required: true },
+  rowsPerPage: { type: Number, default: 10 },
   loading: { type: Boolean, default: false },
+  filter: { type: Boolean, default: false },
+  filterKey: { type: String, default: "" },
 });
 
-const goToPage = (page) => {
-  currentPage.value = page;
-};
 // State for pagination
 const currentPage = ref(1);
+const filterText = ref("");
 
 // Total number of pages
-const totalPages = computed(() => Math.ceil(data.length / rowsPerPage));
+const totalPages = computed(() =>
+  Math.ceil(filteredData.value.length / rowsPerPage)
+);
+
+// Filtered data based on the filterText and filterKey
+const filteredData = computed(() => {
+  if (!filter || !filterText.value) return data;
+
+  const lowercasedFilter = filterText.value.toLowerCase();
+
+  return data.filter((row) =>
+    filterKey
+      ? row[filterKey]?.toString().toLowerCase().includes(lowercasedFilter)
+      : Object.values(row).some((value) =>
+          value.toString().toLowerCase().includes(lowercasedFilter)
+        )
+  );
+});
 
 // Paginated data based on the current page
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  return data?.slice(start, end) || [];
+  return filteredData.value.slice(start, end);
 });
 
 // Navigate to the previous page
@@ -157,6 +184,11 @@ const nextPage = () => {
   }
 };
 
+// Navigate to a specific page
+const goToPage = (page) => {
+  currentPage.value = page;
+};
+
 /**
  * Resolves the cell content based on the column key
  * Supports nested properties (e.g., "user.name")
@@ -170,7 +202,7 @@ const resolveCell = (row, key) => {
 /* Responsive table styles for small screens */
 @media (max-width: 768px) {
   table {
-    font-size: 0.875rem; /* Smaller font size for mobile */
+    font-size: 0.875rem;
   }
 }
 </style>

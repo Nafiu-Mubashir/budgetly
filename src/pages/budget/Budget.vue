@@ -66,23 +66,17 @@ import Dropdown from "@/components/dropdown/Dropdown.vue";
 import BudgetModal from "@/components/budgetComponents/BudgetModal.vue";
 import { useStore } from "vuex";
 
-const loading = ref(true);
+const loading = ref(false);
 const store = useStore();
 // Define reactive variables for modal state
 const isModalVisible = ref(false);
 const modalTitle = ref(""); // Define modalTitle as a reactive variable
 const budgetData = ref({});
 const BUDGETS = computed(() => store.getters["budget/budgets"]);
-console.log("This is the budget array: ", BUDGETS);
-
-// Example data for the table
-const tableData = [
- 
-];
 
 // Define columns for the table
 const columns = [
-  { key: "id", label: "ID" },
+  { key: "id", label: "S/N" },
   { key: "title", label: "Title" },
   { key: "total_amount", label: "Total Amount ($)" },
   { key: "duration", label: "Duration" },
@@ -90,7 +84,7 @@ const columns = [
 ];
 
 // Open the modal with a specific title and data
-const openModal = (title, data = {}) => {
+const openModal = async (title, data = {}) => {
   modalTitle.value = title; // Set the modal title
   budgetData.value = { ...data }; // Set the data for the modal
   isModalVisible.value = true; // Show the modal
@@ -101,21 +95,9 @@ const closeModal = () => {
   isModalVisible.value = false; // Hide the modal
 };
 
-// Handle actions from the modal (e.g., create, edit, delete)
-const handleModalAction = ({ type, data }) => {
-  console.log(`Action: ${type}`, data);
-  if (type === "create") {
-    console.log("Creating Budget:", data);
-  } else if (type === "edit") {
-    console.log("Editing Budget:", data);
-  } else if (type === "delete") {
-    console.log("Deleting Budget:", data.id);
-  }
-  closeModal(); // Close the modal after the action
-};
-
 // Fetch budgets on component mount
 const fetchBudgets = async () => {
+  loading.value = true;
   try {
     await store.dispatch("budget/fetchBudgets");
   } catch (error) {

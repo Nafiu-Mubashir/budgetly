@@ -84,7 +84,6 @@ const register = async () => {
       email: email.value,
       password: password.value,
     });
-    console.log(response);
 
     if (response.statusCode === "200") {
       router.push("/login");
@@ -94,7 +93,6 @@ const register = async () => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   } finally {
     loading.value = false; // Hide the spinner
   }
