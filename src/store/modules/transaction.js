@@ -34,9 +34,9 @@ export default {
         },
         async createTransaction({ commit }, transactionData) {
             try {
-                const response = await api.post("/transactions", transactionData);
-                commit("ADD_TRANSACTION", response.data);
-                return response.data;
+                const response = await api.post("/transactions/create", transactionData);
+                commit("ADD_TRANSACTION", response);
+                return response;
             } catch (error) {
                 throw error;
             }
@@ -44,22 +44,23 @@ export default {
         async updateTransaction({ commit }, transactionData) {
             try {
                 const response = await api.put(`/transactions/${transactionData.id}`, transactionData);
-                commit("UPDATE_TRANSACTION", response.data);
-                return response.data;
+                commit("UPDATE_TRANSACTION", response);
+                return response;
             } catch (error) {
                 throw error;
             }
         },
         async deleteTransaction({ commit }, transactionId) {
             try {
-                await api.delete(`/transactions/${transactionId}`);
+                const response = await api.delete(`/transactions/${transactionId}`);
                 commit("DELETE_TRANSACTION", transactionId);
+                return response;
             } catch (error) {
                 throw error;
             }
         },
     },
     getters: {
-        transactions: (state) => state.transactions,
+        transactions: (state) => state.transactions || [],
     },
 };

@@ -85,9 +85,11 @@ import ApexChart from "vue3-apexcharts";
 import DashCard from "@/components/cards/DashCard.vue";
 import DashBudgetCard from "@/components/cards/DashBudgetCard.vue";
 import Table from "@/components/table/Table.vue";
-import User from "@/assets/profile.png"
+import { computed } from "vue";
+import { useStore } from "vuex";
 
-
+const store = useStore();
+const transactions = computed(() => store.getters["transaction/transactions"]);
 
 const chartOptions = {
   chart: { id: "financial-statistics", toolbar: { show: false } },

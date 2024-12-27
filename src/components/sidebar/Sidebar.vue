@@ -1,7 +1,7 @@
 <template>
   <!-- Desktop Sidebar -->
   <aside
-    class="hidden md:block w-60 bg-[#F5F5F5] text-black p-4 h-screen border-r"
+    class="hidden md:block w-60 bg-white text-black p-4 h-screen border-r"
   >
     <div class="flex flex-col justify-between h-full">
       <!-- Sidebar Header -->

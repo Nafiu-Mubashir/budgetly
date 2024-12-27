@@ -15,7 +15,11 @@
       @submit.prevent="login"
       class="flex flex-col justify-center p-6 md:p-3 space-y-12"
     >
-      <img src="../../../assets/logo.png" class="w-32 block mx-auto" alt="hg" />
+      <img
+        src="../../../assets/logo.png"
+        class="w-32 block mx-auto"
+        alt="Logo"
+      />
       <div class="w-full md:w-[70%] mx-auto space-y-10 mt-10 md:mt-0">
         <div class="mb-4">
           <h2 class="text-2xl font-semibold">Login</h2>
@@ -25,27 +29,40 @@
         </div>
         <div class="space-y-6">
           <Input
-            v-model="email"
+            v-model="formData.email"
             label="Email Address"
             type="email"
             placeholder="Enter your email"
           />
+          <p
+            v-if="!emailIsValid && formData.email"
+            class="text-red-500 text-sm"
+          >
+            Please enter a valid email address.
+          </p>
+
           <Input
-            v-model="password"
+            v-model="formData.password"
             label="Password"
             type="password"
             placeholder="Enter your password"
           />
+          <p
+            v-if="!passwordIsValid && formData.password"
+            class="text-red-500 text-sm"
+          >
+            Password must be at least 6 characters long.
+          </p>
 
           <!-- Button with loading spinner -->
           <button
             type="submit"
             class="w-full bg-main text-white p-2 py-3 rounded capitalize flex justify-center items-center"
-            :disabled="loading"
+            :disabled="!isFormValid || loading"
+            :class="!isFormValid && 'cursor-not-allowed bg-main/60'"
           >
             <span v-if="!loading">Login</span>
             <Spinner v-else />
-            <!-- Spinner when loading -->
           </button>
 
           <p class="text-sm text-center">
@@ -63,37 +80,48 @@
 <script setup>
 import Input from "@/components/input/Input.vue";
 import Spinner from "@/components/spinner/Spinner.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import { useStore } from "vuex";
 
 const store = useStore();
-const email = ref("");
-const password = ref("");
 const router = useRouter();
 const loading = ref(false);
+const formData = ref({
+  email: "",
+  password: "",
+});
+
+// Validation rules
+const emailIsValid = computed(() =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.value.email)
+);
+const passwordIsValid = computed(() => formData.value.password.length >= 6);
+
+// Check if the form is valid
+const isFormValid = computed(() => emailIsValid.value && passwordIsValid.value);
 
 const login = async () => {
   loading.value = true; // Show the spinner
+console.log(formData);
 
   try {
-    const response = await store.dispatch("auth/login", {
-      email: email.value,
-      password: password.value,
-    });
+    const response = await store.dispatch("auth/login", formData.value);
+    console.log(response, "login response");
 
-    if (response.statusCode === "200") {
-      // Fetch user data after successful login
-      await store.dispatch("auth/fetchUser");
-      toast.success("Login successful");
+    if (response.statusCode === 200) {
+      toast.success(response.message);
       router.push("/dashboard"); // Redirect to dashboard
+      await store.dispatch("auth/fetchUser");
     } else {
-      toast.error(response.message);
+      toast.error(response.error);
     }
   } catch (error) {
-    toast.error(error.response?.data?.message || "An error occurred");
-    console.error(error);
+    console.log(error);
+
+    toast.error(error.response.error || "An error occurred");
+    console.error(error.response.error);
   } finally {
     loading.value = false; // Hide the spinner
   }
@@ -101,7 +129,7 @@ const login = async () => {
 </script>
 
 <style scoped>
-.loader {
+/* .loader {
   border: 2px solid transparent;
   border-top: 2px solid #fff;
   border-radius: 50%;
@@ -117,5 +145,5 @@ const login = async () => {
   100% {
     transform: rotate(360deg);
   }
-}
+} */
 </style>

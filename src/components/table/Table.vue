@@ -1,7 +1,7 @@
 <template>
   <div class="relative overflow-scroll md:overflow-visible overflow-y-visible">
     <!-- Conditionally Render Filter Input -->
-    <div v-if="filter" class="mb-4 w-[30%] ml-auto">
+    <div v-if="filter" class="mb-4 md:w-[30%] ml-auto">
       <Input
         v-model="filterText"
         type="text"

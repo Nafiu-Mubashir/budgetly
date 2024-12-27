@@ -75,7 +75,9 @@
       <div class="space-y-4">
         <p class="mb-4 text-sm md:text-sm text-center">
           Are you sure you want to delete budget:
-          <span class="text-main font-semibold capitalize">{{ budgetData.title }}</span
+          <span class="text-main font-semibold capitalize">{{
+            budgetData.title
+          }}</span
           >?
         </p>
         <div class="flex justify-between">
@@ -118,7 +120,6 @@ const { budgetData, modalTitle } = defineProps({
 });
 
 const emit = defineEmits(["close", "action"]);
-console.log(budgetData.id);
 
 const store = useStore();
 const loading = ref(false);
@@ -140,20 +141,26 @@ const submitForm = async () => {
     if (modalTitle === "Add New Budget") {
       // Create Budget
       response = await store.dispatch("budget/createBudget", formData.value);
-      toast.success("Budget added successfully!");
+      toast.success(response.message);
     } else if (modalTitle === "Edit Budget") {
       // Edit Budget
       response = await store.dispatch("budget/updateBudget", {
         id: formData.value.id,
         data: formData.value,
       });
-      toast.success("Budget updated successfully!");
+      toast.success(response.message);
+    }
+
+    if (response.status === 200) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.error);
     }
 
     // emit("action", { type: modalTitle, data: response.data });
     closeModal();
   } catch (error) {
-    toast.error("An error occurred. Please try again.");
+    // toast.error(error);
     console.error(error);
   } finally {
     await store.dispatch("budget/fetchBudgets");
@@ -166,12 +173,16 @@ const handleDelete = async () => {
   loading.value = true;
 
   try {
-    await store.dispatch("budget/deleteBudget", budgetData.id);
-    toast.success("Budget deleted successfully!");
+    const response = await store.dispatch("budget/deleteBudget", budgetData.id);
+    if (response.statusCode === 200) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.error);
+    }
     // emit("action", { type: "delete", id: budgetData.id });
     closeModal();
   } catch (error) {
-    toast.error("An error occurred. Please try again.");
+    toast.error(error);
     console.error(error);
   } finally {
     await store.dispatch("budget/fetchBudgets");

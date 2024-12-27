@@ -1,7 +1,9 @@
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 h-screen bg-white">
-     <div class="hidden md:block">
-      <div class="flex justify-center items-center bg-main w-[95%] mx-auto mt-4 rounded-lg h-[95%]">
+    <div class="hidden md:block">
+      <div
+        class="flex justify-center items-center bg-main w-[95%] mx-auto mt-4 rounded-lg h-[95%]"
+      >
         <img
           src="../../../assets/regs.jpg"
           alt="login image"
@@ -23,38 +25,43 @@
         </div>
         <div class="space-y-6">
           <Input
-          v-model="username"
-          type="text"
-          placeholder="Enter your username"
-        />
-        <Input v-model="email" type="email" placeholder="Enter your email" />
-        <Input
-          v-model="password"
-          type="password"
-          placeholder="Enter your password"
-        />
-        <div class="text-center text-xs text-gray-400">
-          <p>By continuing, you accept our</p>
-          <p><span class="text-main">Terms of Service</span> and <span class="text-main">Privacy Policy</span>.</p>
-        </div>
+            v-model="formData.username"
+            type="text"
+            placeholder="Enter your username"
+          />
+          <Input
+            v-model="formData.email"
+            type="email"
+            placeholder="Enter your email"
+          />
+          <Input
+            v-model="formData.password"
+            type="password"
+            placeholder="Enter your password"
+          />
+          <div class="text-center text-xs text-gray-400">
+            <p>By continuing, you accept our</p>
+            <p>
+              <span class="text-main">Terms of Service</span> and
+              <span class="text-main">Privacy Policy</span>.
+            </p>
+          </div>
 
-        <!-- Button with loading spinner -->
-        <button
-          type="submit"
-          class="w-full bg-main text-white p-2 py-3 rounded capitalize flex justify-center items-center"
-          :disabled="loading"
-        >
-          <span v-if="!loading">register</span>
-          <span v-else class="loader"></span>
-          <!-- Spinner when loading -->
-        </button>
-
-        <p class="text-sm text-center">
-          Already have an account
-          <router-link to="/login" class="text-main"
-            >Sign In</router-link
+          <!-- Button with loading spinner -->
+          <button
+            type="submit"
+            class="w-full bg-main text-white p-2 py-3 rounded capitalize flex justify-center items-center"
+            :disabled="loading"
           >
-        </p>
+            <span v-if="!loading">register</span>
+            <span v-else class="loader"></span>
+            <!-- Spinner when loading -->
+          </button>
+
+          <p class="text-sm text-center">
+            Already have an account
+            <router-link to="/login" class="text-main">Sign In</router-link>
+          </p>
         </div>
       </div>
     </form>
@@ -69,9 +76,11 @@ import { toast } from "vue3-toastify";
 import { useStore } from "vuex";
 const store = useStore();
 
-const username = ref("");
-const email = ref("");
-const password = ref("");
+const formData = ref({
+  username: "",
+  email: "",
+  password: "",
+});
 const router = useRouter();
 const loading = ref(false);
 
@@ -79,20 +88,17 @@ const register = async () => {
   loading.value = true; // Show the spinner
 
   try {
-    const response = await store.dispatch("auth/register", {
-      username: username.value,
-      email: email.value,
-      password: password.value,
-    });
+    const response = await store.dispatch("auth/register", formData.value);
+    console.log(response);
 
-    if (response.statusCode === "200") {
+    if (response.statusCode === 200) {
       router.push("/login");
       toast.success(response.message);
-    } else {
-      toast.error(response.message);
     }
   } catch (error) {
-    toast.error(error.message);
+    console.log(error);
+
+    toast.error(error.response.data.error);
   } finally {
     loading.value = false; // Hide the spinner
   }

@@ -116,7 +116,6 @@ const { transactionData, modalTitle } = defineProps({
 });
 
 const emit = defineEmits(["close", "action"]);
-console.log(transactionData.id);
 
 const store = useStore();
 const loading = ref(false);
@@ -141,23 +140,23 @@ const submitForm = async () => {
         "transaction/createTransaction",
         formData.value
       );
-      toast.success("Transaction added successfully!");
+      toast.success(response.message);
     } else if (modalTitle === "Edit Transaction") {
       // Edit Transaction
       response = await store.dispatch("transaction/updateTransaction", {
         id: formData.value.id,
         data: formData.value,
       });
-      toast.success("Transaction updated successfully!");
+      toast.success(response.message);
     }
-
+    console.log(response);
     // emit("action", { type: modalTitle, data: response.data });
     closeModal();
   } catch (error) {
-    toast.error("An error occurred. Please try again.");
+    toast.error(error.response.data.message);
     console.error(error);
   } finally {
-    await store.dispatch("transaction/fetchTransactions")
+    await store.dispatch("transaction/fetchTransactions");
     loading.value = false;
   }
 };
@@ -167,15 +166,23 @@ const handleDelete = async () => {
   loading.value = true;
 
   try {
-    await store.dispatch("transaction/deleteTransaction", transactionData.id);
-    toast.success("Transaction deleted successfully!");
-    // emit("action", { type: "delete", id: transactionData.id });
+    const response = await store.dispatch(
+      "transaction/deleteTransaction",
+      transactionData.id
+    );
+    console.log(response);
+
+    if (response.statusCode === 200) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.error);
+    }
     closeModal();
   } catch (error) {
-    toast.error("An error occurred. Please try again.");
+    toast.error(error);
     console.error(error);
   } finally {
-    await store.dispatch("transaction/fetchTransactions")
+    await store.dispatch("transaction/fetchTransactions");
     loading.value = false;
   }
 };
