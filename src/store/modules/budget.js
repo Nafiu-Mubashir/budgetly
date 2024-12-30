@@ -50,25 +50,28 @@ export default {
         async createBudget({ commit }, budgetData) {
             try {
                 const response = await api.post("/budgets/create", budgetData);
-                commit("ADD_BUDGET", response.data);
-                return response.data;
+                commit("ADD_BUDGET", response);
+                return response;
             } catch (error) {
                 throw error;
             }
         },
         async updateBudget({ commit }, budgetData) {
             try {
-                const response = await api.put(`/budgets/${budgetData.id}`, budgetData);
-                commit("UPDATE_BUDGET", response.data);
-                return response.data;
+                const response = await api.patch(`/budgets/${budgetData.id}`, budgetData);
+                commit("UPDATE_BUDGET", response);
+                return response;
             } catch (error) {
                 throw error;
             }
         },
         async deleteBudget({ commit }, budgetId) {
             try {
-                await api.delete(`/budgets/${budgetId}`);
+                const response = await api.delete(`/budgets/${budgetId}`);
                 commit("DELETE_BUDGET", budgetId);
+                console.log(response);
+                
+                return response;
             } catch (error) {
                 throw error;
             }

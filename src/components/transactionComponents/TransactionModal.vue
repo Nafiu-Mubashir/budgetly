@@ -130,6 +130,7 @@ const closeModal = () => {
 // Submit form for both create and edit
 const submitForm = async () => {
   loading.value = true;
+console.log(formData.value);
 
   try {
     let response;
@@ -140,23 +141,26 @@ const submitForm = async () => {
         "transaction/createTransaction",
         formData.value
       );
-      toast.success(response.message);
     } else if (modalTitle === "Edit Transaction") {
       // Edit Transaction
+      console.log(formData.value, formData.value.id);
+
       response = await store.dispatch("transaction/updateTransaction", {
         id: formData.value.id,
         data: formData.value,
       });
-      toast.success(response.message);
     }
-    console.log(response);
-    // emit("action", { type: modalTitle, data: response.data });
-    closeModal();
+
+    if (response.statusCode === 200) {
+      toast.success(response.message);
+      await store.dispatch("transaction/fetchTransactions");
+      closeModal();
+    }
   } catch (error) {
     toast.error(error.response.data.message);
     console.error(error);
   } finally {
-    await store.dispatch("transaction/fetchTransactions");
+    // await store.dispatch("transaction/fetchTransactions");
     loading.value = false;
   }
 };
@@ -174,15 +178,15 @@ const handleDelete = async () => {
 
     if (response.statusCode === 200) {
       toast.success(response.message);
+      await store.dispatch("transaction/fetchTransactions");
+      closeModal();
     } else {
       toast.error(response.error);
     }
-    closeModal();
   } catch (error) {
     toast.error(error);
     console.error(error);
   } finally {
-    await store.dispatch("transaction/fetchTransactions");
     loading.value = false;
   }
 };

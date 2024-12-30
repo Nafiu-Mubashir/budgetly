@@ -89,15 +89,11 @@ const register = async () => {
 
   try {
     const response = await store.dispatch("auth/register", formData.value);
-    console.log(response);
-
     if (response.statusCode === 200) {
       router.push("/login");
       toast.success(response.message);
     }
   } catch (error) {
-    console.log(error);
-
     toast.error(error.response.data.error);
   } finally {
     loading.value = false; // Hide the spinner
@@ -106,21 +102,4 @@ const register = async () => {
 </script>
 
 <style scoped>
-.loader {
-  border: 2px solid transparent;
-  border-top: 2px solid #fff;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 </style>

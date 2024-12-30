@@ -9,7 +9,7 @@
       />
     </div>
     <table
-      class="w-full min-h-[65vh text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg"
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg"
     >
       <!-- Table Header -->
       <thead

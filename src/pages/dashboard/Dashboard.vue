@@ -85,11 +85,26 @@ import ApexChart from "vue3-apexcharts";
 import DashCard from "@/components/cards/DashCard.vue";
 import DashBudgetCard from "@/components/cards/DashBudgetCard.vue";
 import Table from "@/components/table/Table.vue";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
-const transactions = computed(() => store.getters["transaction/transactions"]);
+const summary = computed(() => store.getters["dashboard/summary"]);
+const monthlySummary = computed(() => store.getters["dashboard/monthlySummary"]);
+console.log(summary.value);
+// console.log(monthlySummary.value);
+// Fetch budgets on component mount
+const fetchSummary = async () => {
+  // loading.value = true;
+  try {
+    await store.dispatch("dashboard/fetchSummary");
+    await store.dispatch("dashboard/fetchMonthlySummary");
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+  }
+};
+
+onMounted(fetchSummary);
 
 const chartOptions = {
   chart: { id: "financial-statistics", toolbar: { show: false } },

@@ -15,7 +15,7 @@
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
       <Table :data="BUDGETS" :columns="columns" :loading="loading">
         <template #actions="{ row }">
-          <Dropdown>
+          <Dropdown >
             <ul class="py-1">
               <li>
                 <button

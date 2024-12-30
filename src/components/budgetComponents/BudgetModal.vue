@@ -134,6 +134,7 @@ const closeModal = () => {
 // Submit form for both create and edit
 const submitForm = async () => {
   loading.value = true;
+console.log(formData.value);
 
   try {
     let response;
@@ -141,29 +142,28 @@ const submitForm = async () => {
     if (modalTitle === "Add New Budget") {
       // Create Budget
       response = await store.dispatch("budget/createBudget", formData.value);
-      toast.success(response.message);
     } else if (modalTitle === "Edit Budget") {
       // Edit Budget
       response = await store.dispatch("budget/updateBudget", {
         id: formData.value.id,
-        data: formData.value,
+        data: {
+          total_amount: formData.value.total_amount,
+          duration: formData.value.duration,
+          title: formData.value.title
+        },
       });
-      toast.success(response.message);
     }
 
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       toast.success(response.message);
-    } else {
-      toast.error(response.error);
+    await store.dispatch("budget/fetchBudgets");
+      closeModal();
     }
 
-    // emit("action", { type: modalTitle, data: response.data });
-    closeModal();
   } catch (error) {
-    // toast.error(error);
+    toast.error(error.response.data.error);
     console.error(error);
   } finally {
-    await store.dispatch("budget/fetchBudgets");
     loading.value = false;
   }
 };
@@ -176,16 +176,16 @@ const handleDelete = async () => {
     const response = await store.dispatch("budget/deleteBudget", budgetData.id);
     if (response.statusCode === 200) {
       toast.success(response.message);
+      await store.dispatch("budget/fetchBudgets");
+      closeModal();
     } else {
       toast.error(response.error);
     }
     // emit("action", { type: "delete", id: budgetData.id });
-    closeModal();
   } catch (error) {
-    toast.error(error);
+     toast.error(error.response.data.error);
     console.error(error);
   } finally {
-    await store.dispatch("budget/fetchBudgets");
     loading.value = false;
   }
 };

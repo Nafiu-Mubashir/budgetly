@@ -5,7 +5,7 @@
       <Wallet color="#63BF9C" size="30" v-if="title === 'Assets'" />
       <WalletMinimal color="#63BF9C" size="30" v-if="title === 'Balance'" />
       <FileDown color="#63BF9C" size="30" v-if="title === 'Income'" />
-      <FileUp color="#63BF9C" size="30" v-if="title === 'Expenditure'" />
+      <FileUp color="#63BF9C" size="30" v-if="title === 'Expenses'" />
     </div>
     <!-- Text Content Section -->
     <div>

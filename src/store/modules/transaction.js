@@ -43,7 +43,7 @@ export default {
         },
         async updateTransaction({ commit }, transactionData) {
             try {
-                const response = await api.put(`/transactions/${transactionData.id}`, transactionData);
+                const response = await api.patch(`/transactions/${transactionData.id}`, transactionData);
                 commit("UPDATE_TRANSACTION", response);
                 return response;
             } catch (error) {

@@ -104,24 +104,18 @@ const isFormValid = computed(() => emailIsValid.value && passwordIsValid.value);
 
 const login = async () => {
   loading.value = true; // Show the spinner
-console.log(formData);
-
+ 
   try {
     const response = await store.dispatch("auth/login", formData.value);
-    console.log(response, "login response");
 
     if (response.statusCode === 200) {
       toast.success(response.message);
       router.push("/dashboard"); // Redirect to dashboard
       await store.dispatch("auth/fetchUser");
-    } else {
-      toast.error(response.error);
     }
   } catch (error) {
-    console.log(error);
-
-    toast.error(error.response.error || "An error occurred");
-    console.error(error.response.error);
+    toast.error(error.response.data.error);
+    console.error(error);
   } finally {
     loading.value = false; // Hide the spinner
   }
@@ -129,21 +123,4 @@ console.log(formData);
 </script>
 
 <style scoped>
-/* .loader {
-  border: 2px solid transparent;
-  border-top: 2px solid #fff;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-} */
 </style>
