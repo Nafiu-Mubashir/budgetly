@@ -1,9 +1,7 @@
 <template>
-  <div
-    class="md:w-[95%] mx-auto min-h-scree space-y-4"
-  >
+  <div class="md:w-[95%] mx-auto min-h-scree space-y-4">
     <section class="flex justify-between items-center">
-      <h1 class="text-base md:text-lg font-semibold">Transaction</h1>
+      <h1 class="text-base md:text-2xl font-semibold">Transaction</h1>
       <button
         @click="openModal('Add New Transaction')"
         class="bg-main text-white px-2 md:px-4 py-2 rounded text-sm md:text-base"
@@ -12,8 +10,23 @@
       </button>
     </section>
 
+    <!-- Summary Section -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <DashCard title="Total Income" value="0" />
+      <DashCard title="Total Expenses" value="0" />
+      <DashCard title="Net Balance" value="0" :icon="Wallet" />
+      <DashCard title="Total Transactions" value="0" :icon="WalletMinimal" />
+    </div>
+
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
-      <Table :data="transactions" :columns="columns" :loading="loading" filter="true" filterKey="category">
+      <Table
+        :data="transactions"
+        :columns="columns"
+        :loading="loading"
+        filter="true"
+        filterKey="category"
+        placeholder="Filter by category"
+      >
         <template #actions="{ row }">
           <Dropdown>
             <ul class="py-1">
@@ -60,11 +73,13 @@
 </template>
 
 <script setup>
-import { ref, computed, } from "vue";
+import { ref, computed } from "vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
 import TransactionModal from "@/components/transactionComponents/TransactionModal.vue";
 import { useStore } from "vuex";
+import DashCard from "@/components/cards/DashCard.vue";
+import { Wallet, WalletMinimal } from "lucide-vue-next";
 
 const loading = ref(false);
 const store = useStore();
@@ -96,7 +111,6 @@ const closeModal = () => {
 
 // Handle actions from the modal (e.g., create, edit, delete)
 const handleModalAction = ({ type, data }) => {
-  
   if (type === "create") {
     return data;
   } else if (type === "edit") {

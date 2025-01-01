@@ -1,7 +1,7 @@
 <template>
   <div class="md:w-[95%] mx-auto min-h-scree space-y-4">
     <section class="flex justify-between items-center">
-      <h1 class="text-lg font-semibold">Budget</h1>
+      <h1 class="text-base md:text-2xl font-semibold">Budget</h1>
       <button
         @click="openModal('Add New Budget')"
         class="bg-main text-white px-2 md:px-4 py-2 rounded text-sm md:text-base"
@@ -9,13 +9,27 @@
         Add Budget
       </button>
     </section>
+    <!-- Summary Section -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <DashCard title="Total Budgets" value="0" :icon="WalletMinimal" />
+      <DashCard title="Remaining Budget" value="0" :icon="Wallet" />
+      <DashCard title="Used Budget" value="0" :icon="FileUp" />
+      <DashCard title="Monthly Allocation" value="0" :icon="FileDown" />
+    </div>
     <!-- <div v-if="loading" class="mt-5 text-center">
       Loading budgets...
     </div> -->
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
-      <Table :data="BUDGETS" :columns="columns" :loading="loading">
+      <Table
+        :data="BUDGETS"
+        :columns="columns"
+        :loading="loading"
+        filter="true"
+        filterKey="duration"
+        placeholder="Filter by duration"
+      >
         <template #actions="{ row }">
-          <Dropdown >
+          <Dropdown>
             <ul class="py-1">
               <li>
                 <button
@@ -65,6 +79,8 @@ import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
 import BudgetModal from "@/components/budgetComponents/BudgetModal.vue";
 import { useStore } from "vuex";
+import DashCard from "@/components/cards/DashCard.vue";
+import { FileDown, FileUp, Wallet, WalletMinimal } from "lucide-vue-next";
 
 const loading = ref(false);
 const store = useStore();

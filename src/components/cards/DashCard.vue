@@ -8,6 +8,7 @@
       <WalletMinimal color="#63BF9C" size="30" v-if="title === 'Balance'" />
       <FileDown color="#63BF9C" size="30" v-if="title === 'Total Income'" />
       <FileUp color="#63BF9C" size="30" v-if="title === 'Total Expenses'" />
+      <component :is="icon" color="#63BF9C" size="30" v-if="icon" />
     </div>
     <!-- Text Content Section -->
     <div>

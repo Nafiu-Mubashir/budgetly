@@ -5,7 +5,7 @@
       <Input
         v-model="filterText"
         type="text"
-        placeholder="Filter by category"
+        :placeholder="placeholder"
       />
     </div>
     <table
@@ -89,7 +89,8 @@
     <button
       @click="prevPage"
       :disabled="currentPage === 1"
-      class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+      class="px-2 py-1 bg-main text-white rounded disabled:opacity-50 hover:bg-main transition"
+      :class="currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'"
     >
       Prev
     </button>
@@ -99,7 +100,7 @@
         v-for="page in totalPages"
         :key="page"
         @click="goToPage(page)"
-        class="px-3 py-1 rounded transition"
+        class="px-3 py-1 rounded-full transition"
         :class="[
           'text-gray-500 hover:bg-main hover:text-white',
           currentPage === page ? 'bg-main text-white' : 'bg-gray-100',
@@ -112,7 +113,8 @@
     <button
       @click="nextPage"
       :disabled="currentPage === totalPages"
-      class="px-2 py-1 bg-gray-200 text-gray-500 rounded disabled:opacity-50 hover:bg-gray-300 transition"
+      class="px-2 py-1 bg-main text-white rounded disabled:opacity-50 hover:bg-main transition"
+      :class="currentPage === totalPages ? 'cursor-not-allowed' : 'cursor-pointer'"
     >
       Next
     </button>
@@ -138,6 +140,7 @@ const {
   loading: { type: Boolean, default: false },
   filter: { type: Boolean, default: false },
   filterKey: { type: String, default: "" },
+  placeholder: { type: String, default: "" },
 });
 
 // State for pagination
