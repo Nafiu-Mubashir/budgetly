@@ -54,7 +54,7 @@
             :disabled="loading"
           >
             <span v-if="!loading">register</span>
-            <span v-else class="loader"></span>
+             <Spinner v-else />
             <!-- Spinner when loading -->
           </button>
 
@@ -70,6 +70,7 @@
 
 <script setup>
 import Input from "@/components/input/Input.vue";
+import Spinner from "@/components/spinner/Spinner.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
@@ -90,8 +91,11 @@ const register = async () => {
   try {
     const response = await store.dispatch("auth/register", formData.value);
     if (response.statusCode === 200) {
-      router.push("/login");
+      
       toast.success(response.message);
+      setTimeout(() => {
+        router.push("/login"); // Redirect to dashboard
+      }, 1000)
     }
   } catch (error) {
     toast.error(error.response.data.error);

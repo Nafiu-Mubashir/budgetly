@@ -23,6 +23,14 @@
           type="number"
           placeholder="Total Amount"
         />
+        <Select
+          v-model="formData.transaction_type"
+          :options="dropdownOptions"
+          label=""
+          placeholder="Select Expenses Type"
+          :disabled="false"
+          error=""
+        />
         <button
           type="submit"
           class="bg-main text-white px-2 py-3 w-full rounded mt-4"
@@ -38,27 +46,35 @@
 
     <!-- View Transaction -->
     <template v-else-if="modalTitle === 'View Transaction'">
-      <div class="p-3 flex flex-col space-y-3">
+      <div class="p-3 grid grid-cols-2 gap-4">
         <div class="flex-col">
-          <label class="font-semibold text-sm">Narration</label>
-          <p class="text-sm">{{ transactionData.narration }}</p>
+          <label class="font-semibold text-sm text-main">Narration</label>
+          <p class="text-sm capitalize">{{ transactionData.narration }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Amount</label>
-          <p class="text-sm">{{ commaformatter(transactionData.amount) }}</p>
+          <label class="font-semibold text-sm text-main">Amount</label>
+          <p class="text-sm">{{ commaFormatter(transactionData.amount) }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Duration</label>
-          <p class="text-sm">{{ transactionData.category }}</p>
+          <label class="font-semibold text-sm text-main">Category</label>
+          <p class="text-sm capitalize">{{ transactionData.category }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Date Created</label>
+          <label class="font-semibold text-sm text-main"
+            >Transaction Type</label
+          >
+          <p class="text-sm capitalize">
+            {{ transactionData.transaction_type }}
+          </p>
+        </div>
+        <div class="flex-col">
+          <label class="font-semibold text-sm text-main">Date Created</label>
           <p class="text-sm">
             {{ shortDateFormatter(transactionData.created_at) }}
           </p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Time</label>
+          <label class="font-semibold text-sm text-main">Time</label>
           <p class="text-sm">
             {{ timeFormatter(transactionData.created_at, true) }}
           </p>
@@ -103,10 +119,18 @@ import Spinner from "../spinner/Spinner.vue";
 import { useStore } from "vuex";
 import { toast } from "vue3-toastify";
 import {
-  commaformatter,
+  commaFormatter,
   shortDateFormatter,
   timeFormatter,
 } from "@/utils/formatter";
+
+import Select from "@/components/selectInput/Select.vue";
+
+const dropdownOptions = [
+  { label: "Income", value: "income" },
+  { label: "Expenses", value: "expenses" },
+  // { label: "Option 3", value: 3 },
+];
 
 // Props passed into the modal
 const { transactionData, modalTitle } = defineProps({
@@ -130,24 +154,28 @@ const closeModal = () => {
 // Submit form for both create and edit
 const submitForm = async () => {
   loading.value = true;
-console.log(formData.value);
+  // console.log(formData.value);
 
   try {
     let response;
 
     if (modalTitle === "Add New Transaction") {
       // Create Transaction
-      response = await store.dispatch(
-        "transaction/createTransaction",
-        formData.value
-      );
+      response = await store.dispatch("transaction/createTransaction", {
+        amount: Number(formData.value.amount),
+        transaction_type: formData.value.transaction_type,
+        narration: formData.value.narration,
+      });
     } else if (modalTitle === "Edit Transaction") {
       // Edit Transaction
       console.log(formData.value, formData.value.id);
 
       response = await store.dispatch("transaction/updateTransaction", {
         id: formData.value.id,
-        data: formData.value,
+        amount: Number(formData.value.amount),
+        transaction_type: formData.value.transaction_type,
+        narration: formData.value.narration,
+        budget_id: formData.value.budget_id,
       });
     }
 
@@ -157,7 +185,7 @@ console.log(formData.value);
       closeModal();
     }
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error.response.data.error);
     console.error(error);
   } finally {
     // await store.dispatch("transaction/fetchTransactions");

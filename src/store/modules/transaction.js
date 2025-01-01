@@ -26,7 +26,8 @@ export default {
         async fetchTransactions({ commit }) {
             try {
                 const response = await api.get("/transactions");
-                commit("SET_TRANSACTIONS", response.transactions);
+                const sortedTransactions = response.transactions.reverse()
+                commit("SET_TRANSACTIONS", sortedTransactions); // Commit sorted transactions
                 return response.transactions;
             } catch (error) {
                 throw error;
@@ -41,9 +42,9 @@ export default {
                 throw error;
             }
         },
-        async updateTransaction({ commit }, transactionData) {
+        async updateTransaction({ commit }, {id, ...transactionData}) {
             try {
-                const response = await api.patch(`/transactions/${transactionData.id}`, transactionData);
+                const response = await api.patch(`/transactions/${id}`, transactionData);
                 commit("UPDATE_TRANSACTION", response);
                 return response;
             } catch (error) {

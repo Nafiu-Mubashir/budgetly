@@ -6,8 +6,8 @@ import Dashboard from '@/pages/dashboard/Dashboard.vue';
 import Registration from '@/pages/auth/registration/Registration.vue';
 import Budget from '@/pages/budget/Budget.vue';
 import Transaction from '@/pages/transaction/Transaction.vue';
-import Insight from '@/pages/insight/Insight.vue';
 import NotFound from '@/pages/notFound/NotFound.vue';
+import Profile from '@/pages/profile/Profile.vue';
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -29,8 +29,7 @@ const routes = [
       { path: '', name: 'Dashboard', component: Dashboard },
       { path: 'budget', name: 'Budget', component: Budget },
       { path: 'transaction', name: 'Transaction', component: Transaction },
-      { path: 'insight', name: 'Insight', component: Insight },
-      { path: 'profile', name: 'Profile', component: '' },
+      { path: 'profile', name: 'Profile', component: Profile },
     ],
   },
   {

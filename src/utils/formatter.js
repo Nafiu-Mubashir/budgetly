@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-export const commaformatter = (value) => {
+export const commaFormatter = (value) => {
     if (!value) return '0';
     const val = value.toString().split(',').join('');
     return Intl.NumberFormat('en-US').format(Number(val));

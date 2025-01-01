@@ -104,22 +104,27 @@ const isFormValid = computed(() => emailIsValid.value && passwordIsValid.value);
 
 const login = async () => {
   loading.value = true; // Show the spinner
- 
+
   try {
     const response = await store.dispatch("auth/login", formData.value);
 
     if (response.statusCode === 200) {
-      toast.success(response.message);
-      router.push("/dashboard"); // Redirect to dashboard
       await store.dispatch("auth/fetchUser");
+      
+      // Add a 1-minute delay before redirecting to the dashboard
+      toast.success(response.message);
+      setTimeout(() => {
+        router.push("/dashboard"); // Redirect to dashboard
+      }, 1000); // 60 seconds (60000 milliseconds)
     }
   } catch (error) {
-    toast.error(error.response.data.error);
+    toast.error(error.response?.data?.error || "An error occurred");
     console.error(error);
   } finally {
     loading.value = false; // Hide the spinner
   }
 };
+
 </script>
 
 <style scoped>

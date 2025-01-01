@@ -20,15 +20,15 @@
           type="number"
           placeholder="Total Amount"
         />
-        <select
+
+        <Select
           v-model="formData.duration"
-          class="w-full p-2 border text-gray-500 rounded focus:outline-none border-main focus:shadow-sm focus:shadow-main"
-        >
-          <option selected disabled>Duration</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-          <option value="yearly">Yearly</option>
-        </select>
+          :options="dropdownOptions"
+          label=""
+          placeholder="Select a Duration"
+          :disabled="false"
+          error=""
+        />
         <button
           type="submit"
           class="bg-main text-white px-2 py-3 w-full rounded mt-4"
@@ -44,25 +44,25 @@
 
     <!-- View Budget -->
     <template v-else-if="modalTitle === 'View Budget'">
-      <div class="p-3 flex flex-col space-y-3">
+      <div class="p-3 grid grid-cols-2 gap-4">
         <div class="flex-col">
-          <label class="font-semibold text-sm">Title</label>
-          <p class="text-sm">{{ budgetData.title }}</p>
+          <label class="font-semibold text-sm text-main">Title</label>
+          <p class="text-sm capitalize">{{ budgetData.title }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Amount</label>
-          <p class="text-sm">{{ commaformatter(budgetData.total_amount) }}</p>
+          <label class="font-semibold text-sm text-main">Amount</label>
+          <p class="text-sm">{{ commaFormatter(budgetData.total_amount) }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Duration</label>
-          <p class="text-sm">{{ budgetData.duration }}</p>
+          <label class="font-semibold text-sm text-main">Duration</label>
+          <p class="text-sm capitalize">{{ budgetData.duration }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Date Created</label>
+          <label class="font-semibold text-sm text-main">Date Created</label>
           <p class="text-sm">{{ shortDateFormatter(budgetData.created_at) }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm">Time</label>
+          <label class="font-semibold text-sm text-main">Time</label>
           <p class="text-sm">
             {{ timeFormatter(budgetData.created_at, true) }}
           </p>
@@ -107,10 +107,17 @@ import Spinner from "../spinner/Spinner.vue";
 import { useStore } from "vuex";
 import { toast } from "vue3-toastify";
 import {
-  commaformatter,
+  commaFormatter,
   shortDateFormatter,
   timeFormatter,
 } from "@/utils/formatter";
+import Select from "@/components/selectInput/Select.vue";
+
+const dropdownOptions = [
+  { label: "Monthly", value: "monthly" },
+  { label: "Weekly", value: "weekly" },
+  { label: "Yearly", value: "yearly" },
+];
 
 // Props passed into the modal
 const { budgetData, modalTitle } = defineProps({
@@ -134,7 +141,6 @@ const closeModal = () => {
 // Submit form for both create and edit
 const submitForm = async () => {
   loading.value = true;
-console.log(formData.value);
 
   try {
     let response;
@@ -146,20 +152,17 @@ console.log(formData.value);
       // Edit Budget
       response = await store.dispatch("budget/updateBudget", {
         id: formData.value.id,
-        data: {
-          total_amount: formData.value.total_amount,
-          duration: formData.value.duration,
-          title: formData.value.title
-        },
+        total_amount: Number(formData.value.total_amount),
+        duration: formData.value.duration,
+        title: formData.value.title,
       });
     }
 
     if (response.statusCode === 200) {
       toast.success(response.message);
-    await store.dispatch("budget/fetchBudgets");
+      await store.dispatch("budget/fetchBudgets");
       closeModal();
     }
-
   } catch (error) {
     toast.error(error.response.data.error);
     console.error(error);
@@ -183,7 +186,7 @@ const handleDelete = async () => {
     }
     // emit("action", { type: "delete", id: budgetData.id });
   } catch (error) {
-     toast.error(error.response.data.error);
+    toast.error(error.response.data.error);
     console.error(error);
   } finally {
     loading.value = false;

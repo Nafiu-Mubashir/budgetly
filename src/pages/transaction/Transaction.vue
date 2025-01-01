@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, } from "vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
 import TransactionModal from "@/components/transactionComponents/TransactionModal.vue";
@@ -106,18 +106,4 @@ const handleModalAction = ({ type, data }) => {
   }
   closeModal(); // Close the modal after the action
 };
-
-// Fetch budgets on component mount
-const fetchTransactions = async () => {
-  loading.value = true;
-  try {
-    await store.dispatch("transaction/fetchTransactions");
-  } catch (error) {
-    console.error("Error fetching transactions:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(fetchTransactions);
 </script>

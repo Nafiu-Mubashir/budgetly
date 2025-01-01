@@ -5,7 +5,7 @@ export default {
     state: {
         token: localStorage.getItem("token") || null,
         email: null, // Store email of the logged-in user
-        user: localStorage.getItem("user") ||  null,
+        user: localStorage.getItem("user") || null,
     },
     mutations: {
         SET_TOKEN(state, token) {
@@ -37,7 +37,7 @@ export default {
             try {
                 const response = await api.post("/auth/login", userObj);
                 console.log(response);
-                
+
                 commit("SET_TOKEN", response.token); // Save the token
                 commit("SET_EMAIL", userObj.email); // Save the email
                 return response;
@@ -56,7 +56,7 @@ export default {
                 const response = await api.get(`/auth/user/${state.email}`, {
                     headers: { Authorization: `Bearer ${state.token}` }, // Include token for secure request
                 });
-             commit("SET_USER", response.user.username);
+                commit("SET_USER", response.user.username);
                 return response.user;
             } catch (error) {
                 throw error;

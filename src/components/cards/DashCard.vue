@@ -1,17 +1,19 @@
 <template>
   <div class="bg-white rounded-lg shadow p-4 space-y-4">
     <!-- Icon Section -->
-    <div class="flex w-10 h-10 shadow-md rounded-md justify-center items-center">
-      <Wallet color="#63BF9C" size="30" v-if="title === 'Assets'" />
+    <div
+      class="flex w-10 h-10 shadow-md rounded-md justify-center items-center"
+    >
+      <Wallet color="#63BF9C" size="30" v-if="title === 'Total Budget'" />
       <WalletMinimal color="#63BF9C" size="30" v-if="title === 'Balance'" />
-      <FileDown color="#63BF9C" size="30" v-if="title === 'Income'" />
-      <FileUp color="#63BF9C" size="30" v-if="title === 'Expenses'" />
+      <FileDown color="#63BF9C" size="30" v-if="title === 'Total Income'" />
+      <FileUp color="#63BF9C" size="30" v-if="title === 'Total Expenses'" />
     </div>
     <!-- Text Content Section -->
     <div>
       <p class="text-sm font-medium text-gray-500">{{ title }}</p>
       <div class="flex justify-between items-center">
-        <p class="text-lg font-bold mt-2">{{ value }}</p>
+        <p class="text-lg font-bold mt-2">${{ commaFormatter(value) }}</p>
         <p
           :class="[
             'text-sm font-medium mt-1 w-12 text-center rounded-lg p-.5',
@@ -28,6 +30,7 @@
 </template>
 
 <script setup>
+import { commaFormatter } from "@/utils/formatter";
 import { FileDown, FileUp, Wallet, WalletMinimal } from "lucide-vue-next";
 
 defineProps({

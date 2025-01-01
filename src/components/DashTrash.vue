@@ -8,29 +8,19 @@
     <!-- Financial Summary Section -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2
-          class="text-base font-semibold lg:font-semibold"
-        >
-          Total Income
-        </h2>
+        <h2 class="text-base font-semibold lg:font-semibold">Total Income</h2>
         <p class="text-lg md:text-md font-semibold text-main">
           #{{ summary.income }}
         </p>
       </div>
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2
-          class="text-base font-semibold lg:font-semibold"
-        >
-          Total Expenses
-        </h2>
+        <h2 class="text-base font-semibold lg:font-semibold">Total Expenses</h2>
         <p class="text-lg md:text-xl font-semibold text-red-600">
           #{{ summary.expenses }}
         </p>
       </div>
       <div class="bg-white p-4 rounded-lg space-y-5 border">
-        <h2
-          class="text-base font-semibold lg:font-semibold"
-        >
+        <h2 class="text-base font-semibold lg:font-semibold">
           Remaining Budget
         </h2>
         <p class="text-lg md:text-xl font-semibold text-blue-600">
@@ -41,9 +31,7 @@
 
     <section class="bg-white p- rounded-lg shadow-d mt-6">
       <!-- Budgets Overview Header -->
-      <h2 class="text-lg md:text-lg font-semibold mb-4">
-        Budgets Overview
-      </h2>
+      <h2 class="text-lg md:text-lg font-semibold mb-4">Budgets Overview</h2>
 
       <!-- Budgets in Grid Format -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -53,9 +41,7 @@
           :key="budget.id"
           class="p-2 md:p-4 bg-gray-50 rounded-lg shadow-sm"
         >
-          <p
-            class="text-base font-semibold capitalize"
-          >
+          <p class="text-base font-semibold capitalize">
             {{ budget.name }}
           </p>
           <div class="relative bg-gray-200 h-2 rounded-full mt-2">
@@ -77,9 +63,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <section class="bg-white p-4 rounded-lg shadow-md lg:col-span-2">
         <!-- Recent Transactions -->
-        <h2 class="text-lg md:text-xl font-semibold">
-          Recent Transactions
-        </h2>
+        <h2 class="text-lg md:text-xl font-semibold">Recent Transactions</h2>
         <ul class="mt-4 space-y-3">
           <li
             v-for="transaction in recentTransactions"
@@ -104,12 +88,19 @@
           </li>
         </ul>
       </section>
-
+      <div class="bg-white rounded-lg shadow space-y-3 p-4">
+        <h2 class="text-lg font-bold">Monthly Budget</h2>
+        <!-- Monthly Budget -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <DashBudgetCard title="Residential Costs" amount="$1,200" />
+          <DashBudgetCard title="Transportation" amount="$36.2" />
+          <DashBudgetCard title="Education" amount="$3,450" />
+          <DashBudgetCard title="Holiday" amount="$29.0" />
+        </div>
+      </div>
       <!-- Spending Insights -->
       <section class="bg-white p-4 w-full rounded-lg shadow-md space-y-2">
-        <h2 class="text-lg md:text-xl font-semibold">
-          Spending Insights
-        </h2>
+        <h2 class="text-lg md:text-xl font-semibold">Spending Insights</h2>
         <canvas id="spendingChart"></canvas>
       </section>
     </div>

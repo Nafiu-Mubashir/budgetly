@@ -57,7 +57,7 @@
           <td
             v-for="column in columns"
             :key="column.key"
-            class="px-4 py-2 whitespace-nowrap"
+            class="px-4 py-2 whitespace-nowrap capitalize"
           >
             <template v-if="column.key === 'actions'">
               <slot name="actions" :row="row" :id="row.id" />
@@ -122,6 +122,7 @@
 <script setup>
 import { defineProps, computed, ref } from "vue";
 import Input from "../input/Input.vue";
+import { commaFormatter } from "@/utils/formatter";
 
 // Destructure props and extract rowsPerPage
 const {
@@ -189,12 +190,16 @@ const goToPage = (page) => {
   currentPage.value = page;
 };
 
-/**
- * Resolves the cell content based on the column key
- * Supports nested properties (e.g., "user.name")
- */
+// Updated resolveCell function
 const resolveCell = (row, key) => {
-  return key.split(".").reduce((acc, prop) => acc?.[prop], row) || "";
+  const value = key.split(".").reduce((acc, prop) => acc?.[prop], row) || "";
+
+  // Apply commaFormatter if the key matches 'total_amount' or 'amount'
+  if (key === "total_amount" || key === "amount") {
+    return "$" + commaFormatter(value);
+  }
+
+  return value;
 };
 </script>
 

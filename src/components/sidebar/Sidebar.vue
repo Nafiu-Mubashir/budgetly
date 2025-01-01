@@ -102,6 +102,7 @@ import {
   X,
   Menu,
   CircleAlert,
+  CircleUser
 } from "lucide-vue-next";
 
 const showModal = ref(false);
@@ -132,5 +133,10 @@ const navLinks = [
     name: "Transaction",
     icon: CoinsIcon,
   },
+  // {
+  //   path: "/dashboard/profile",
+  //   name: "Profile",
+  //   icon: CircleUser,
+  // },
 ];
 </script>

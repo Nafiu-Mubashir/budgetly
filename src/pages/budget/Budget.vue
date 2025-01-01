@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
 import BudgetModal from "@/components/budgetComponents/BudgetModal.vue";
@@ -95,19 +95,19 @@ const closeModal = () => {
   isModalVisible.value = false; // Hide the modal
 };
 
-// Fetch budgets on component mount
-const fetchBudgets = async () => {
-  loading.value = true;
-  try {
-    await store.dispatch("budget/fetchBudgets");
-  } catch (error) {
-    console.error("Error fetching budgets:", error);
-  } finally {
-    loading.value = false;
-  }
-};
+// // Fetch budgets on component mount
+// const fetchBudgets = async () => {
+//   loading.value = true;
+//   try {
+//     await store.dispatch("budget/fetchBudgets");
+//   } catch (error) {
+//     console.error("Error fetching budgets:", error);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 
-onMounted(fetchBudgets);
+// onMounted(fetchBudgets);
 </script>
 
 <!-- <style scoped>

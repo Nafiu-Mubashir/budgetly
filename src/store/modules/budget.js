@@ -28,9 +28,11 @@ export default {
     },
     actions: {
         async fetchBudgets({ commit }) {
+
             try {
                 const response = await api.get("/budgets");
-                commit("SET_BUDGETS", response.budgets);
+                const sortedBudget = response.budgets.reverse()
+                commit("SET_BUDGETS", sortedBudget);
                 return response.budgets;
             } catch (error) {
                 throw error;
@@ -56,9 +58,9 @@ export default {
                 throw error;
             }
         },
-        async updateBudget({ commit }, budgetData) {
+        async updateBudget({ commit }, {id, ...budgetData}) {
             try {
-                const response = await api.patch(`/budgets/${budgetData.id}`, budgetData);
+                const response = await api.patch(`/budgets/${id}`, budgetData);
                 commit("UPDATE_BUDGET", response);
                 return response;
             } catch (error) {

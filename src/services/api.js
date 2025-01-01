@@ -35,7 +35,7 @@ api.interceptors.response.use(
             if (error.response.status === 401) {
                 // Unauthorized: Redirect to login
                 localStorage.removeItem("token");
-                window.location.href = "/login";
+                // window.location.href = "/login";
             } else if (error.response.status === 500) {
                 // Internal Server Error: Show a generic error message
                 console.error("Something went wrong. Please try again later.");
