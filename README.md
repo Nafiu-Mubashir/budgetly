@@ -1,7 +1,3 @@
-Here’s a professional **README.md** file for your frontend project: 
-
----
-
 # **Frontend Application for Budget and Transaction Management**
 
 This project is the frontend implementation of a **Budget and Transaction Management System**, allowing users to manage budgets, track transactions, view financial summaries, and perform other related tasks.
