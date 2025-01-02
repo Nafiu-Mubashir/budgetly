@@ -31,9 +31,6 @@
           :amount="category.total_amount_spent"
           :key="category"
         />
-        <!-- <DashBudgetCard title="Transportation" amount="$36.2" />
-        <DashBudgetCard title="Education" amount="$3,450" />
-        <DashBudgetCard title="Holiday" amount="$29.0" /> -->
       </div>
     </div>
 
@@ -156,39 +153,9 @@ const chartSeries = computed(() => [
 
 // Define columns for the table
 const columns = [
-  // { key: "id", label: "S/N" },
   { key: "title", label: "Title" },
   { key: "total_amount", label: "Total Amount ($)" },
   { key: "duration", label: "Duration" },
 ];
-// const recentTransactions = [
-//   { name: "Phone Store", date: "6 May 2024, 10 AM", amount: -899 },
-//   { name: "Shoe Store", date: "7 May 2024, 8 PM", amount: -1550 },
-//   { name: "Air Ticket", date: "8 May 2024, 7 AM", amount: -800 },
-//   { name: "Fund Payment", date: "10 May 2024, 3 PM", amount: 2120 },
-//   { name: "Top Up", date: "11 May 2024, 1 PM", amount: 1920 },
-// ];
 
-// const payouts = [
-//   {
-//     name: "Electricity",
-//     status: "Paid",
-//     charges: "$5,985.56",
-//     total: "$4,920.00",
-//   },
-//   {
-//     name: "Water Costs",
-//     status: "Pending",
-//     charges: "$4,876.00",
-//     total: "$4,498.00",
-//   },
-//   { name: "Pay Tax", status: "Paid", charges: "$1,985.56", total: "$1,978.00" },
-// ];
-
-// const tableColumns = [
-//   { key: "name", label: "Name" },
-//   { key: "status", label: "Status" },
-//   { key: "charges", label: "Charges" },
-//   { key: "total", label: "Total" },
-// ];
 </script>
