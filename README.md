@@ -13,7 +13,7 @@ This project is the frontend implementation of a **Budget and Transaction Manage
 6. [Environment Variables](#environment-variables)
 7. [API Integration](#api-integration)
 8. [Contributing](#contributing)
-9. [License](#license)
+<!-- 9. [License](#license) -->
 
 ---
 
