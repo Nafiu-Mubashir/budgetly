@@ -12,7 +12,15 @@
         modalTitle === 'Edit Transaction'
       "
     >
-      <form @submit.prevent="submitForm">
+      <form @submit.prevent="submitForm" class="space-y-3">
+         <Select
+          v-model="formData.budget_id"
+          :options="budgetOptions"
+          label=""
+          placeholder="Select Budget"
+          :disabled="false"
+          error=""
+        />
         <Input
           v-model="formData.narration"
           type="text"
@@ -112,7 +120,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, onMounted } from "vue";
+import { defineProps, defineEmits, ref, computed } from "vue";
 import Modal from "@/components/modal/Modal.vue";
 import Input from "../input/Input.vue";
 import Spinner from "../spinner/Spinner.vue";
@@ -126,12 +134,29 @@ import {
 
 import Select from "@/components/selectInput/Select.vue";
 
+const store = useStore();
+const loading = ref(false);
+
 const dropdownOptions = [
   { label: "Income", value: "income" },
   { label: "Expenses", value: "expenses" },
   // { label: "Option 3", value: 3 },
 ];
+const BUDGETS = computed(() => store.getters["budget/budgets"]);
+// Extract only id and title
+const budgetOptions = computed(() => 
+  BUDGETS.value.map(budget => ({
+    value: budget.id,
+    label: budget.title,
+  }))
+);
 
+// Example: Using budgetOptions
+console.log(budgetOptions.value);
+
+
+// Usage example: Logging the transformed array
+console.log(budgetOptions.value);
 // Props passed into the modal
 const { transactionData, modalTitle } = defineProps({
   isVisible: { type: Boolean, required: true },
@@ -140,9 +165,6 @@ const { transactionData, modalTitle } = defineProps({
 });
 
 const emit = defineEmits(["close", "action"]);
-
-const store = useStore();
-const loading = ref(false);
 
 // Reuse the same form data for create and edit
 const formData = ref({ ...transactionData });
@@ -165,6 +187,7 @@ const submitForm = async () => {
         amount: Number(formData.value.amount),
         transaction_type: formData.value.transaction_type,
         narration: formData.value.narration,
+        budget_id: formData.value.budget_id,
       });
     } else if (modalTitle === "Edit Transaction") {
       // Edit Transaction

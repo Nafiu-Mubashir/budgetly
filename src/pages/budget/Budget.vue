@@ -11,10 +11,10 @@
     </section>
     <!-- Summary Section -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-      <DashCard title="Total Budgets" value="0" :icon="WalletMinimal" />
-      <DashCard title="Remaining Budget" value="0" :icon="Wallet" />
-      <DashCard title="Used Budget" value="0" :icon="FileUp" />
-      <DashCard title="Monthly Allocation" value="0" :icon="FileDown" />
+      <DashCard title="Total Budgets" :value="summary.Total_Budget" :icon="WalletMinimal" />
+      <DashCard title="Remaining Budget" :value="summary.Remaining_Budget" :icon="Wallet" />
+      <DashCard title="Used Budget" :value="0" :icon="FileUp" />
+      <DashCard title="Monthly Allocation" :value="0" :icon="FileDown" />
     </div>
     <!-- <div v-if="loading" class="mt-5 text-center">
       Loading budgets...
@@ -89,6 +89,7 @@ const isModalVisible = ref(false);
 const modalTitle = ref(""); // Define modalTitle as a reactive variable
 const budgetData = ref({});
 const BUDGETS = computed(() => store.getters["budget/budgets"]);
+const summary = computed(() => store.getters["dashboard/summary"]);
 
 // Define columns for the table
 const columns = [

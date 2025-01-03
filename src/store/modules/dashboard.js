@@ -18,8 +18,8 @@ export default {
         async fetchSummary({ commit }) {
             try {
                 const response = await api.get("/insights/summary");
-                commit("SET_SUMMARY", response.data);
-                return response;
+                commit("SET_SUMMARY", response.data.summary);
+                return response.data.summary;
             } catch (error) {
                 throw error;
             }
@@ -28,7 +28,7 @@ export default {
             try {
                 const response = await api.get(`/insights/monthly`);
                 commit("SET_MONTHLY_SUMMARY", response.data);
-                return response;
+                return response.data;
             } catch (error) {
                 throw error;
             }

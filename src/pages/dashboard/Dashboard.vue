@@ -3,8 +3,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
       <!-- Overview Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <DashCard title="Total Budget" :value="summary.Remaining_Budget" />
-        <DashCard title="Balance" value="" />
+        <DashCard title="Total Budget" :value="summary.Total_Budget" />
+        <DashCard title="Balance" :value="summary.Balance" />
         <DashCard title="Total Income" :value="summary.Total_Income" />
         <DashCard title="Total Expenses" :value="summary.Total_Expenses" />
       </div>
@@ -27,8 +27,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashBudgetCard
           v-for="category in summary.Top_Spending_Categories"
-          :title="category.category"
-          :amount="category.total_amount_spent"
+          :title="category.Category"
+          :amount="category.Total_Spent"
           :key="category"
         />
       </div>
@@ -88,7 +88,7 @@ import ApexChart from "vue3-apexcharts";
 import DashCard from "@/components/cards/DashCard.vue";
 import DashBudgetCard from "@/components/cards/DashBudgetCard.vue";
 import Table from "@/components/table/Table.vue";
-import { computed } from "vue";
+import { computed, toRaw } from "vue";
 import { useStore } from "vuex";
 import {
   commaFormatter,
@@ -101,6 +101,7 @@ const summary = computed(() => store.getters["dashboard/summary"]);
 const monthlySummary = computed(
   () => store.getters["dashboard/monthlySummary"]
 );
+
 const latestTransactions = computed(() => {
   // Get the transactions from the store
   const allTransactions = store.getters["transaction/transactions"];
@@ -115,7 +116,7 @@ const latestBudget = computed(() => {
 
 // Transform `monthlySummary` data for the chart
 const categories = computed(
-  () => monthlySummary.value.map((item) => item.month) // Extract months for x-axis
+  () => monthlySummary.value.map((item) => item.Month) // Extract months for x-axis
 );
 const incomeSeries = computed(
   () => monthlySummary.value.map((item) => parseFloat(item.total_income)) // Total income data
@@ -123,6 +124,8 @@ const incomeSeries = computed(
 const expenseSeries = computed(
   () => monthlySummary.value.map((item) => parseFloat(item.total_expenses)) // Total expenses data
 );
+console.log(categories.value, "categories");
+
 
 // Chart options and series
 const chartOptions = computed(() => ({

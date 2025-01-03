@@ -12,10 +12,10 @@
 
     <!-- Summary Section -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-      <DashCard title="Total Income" value="0" />
-      <DashCard title="Total Expenses" value="0" />
-      <DashCard title="Net Balance" value="0" :icon="Wallet" />
-      <DashCard title="Total Transactions" value="0" :icon="WalletMinimal" />
+      <DashCard title="Total Income" :value="summary.Total_Income" />
+      <DashCard title="Total Expenses" :value="summary.Total_Expenses" />
+      <DashCard title="Net Balance" :value="0" :icon="Wallet" />
+      <DashCard title="Total Transactions" :value="0" :icon="ArrowLeftRight" />
     </div>
 
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
@@ -79,7 +79,7 @@ import Dropdown from "@/components/dropdown/Dropdown.vue";
 import TransactionModal from "@/components/transactionComponents/TransactionModal.vue";
 import { useStore } from "vuex";
 import DashCard from "@/components/cards/DashCard.vue";
-import { Wallet, WalletMinimal } from "lucide-vue-next";
+import { Wallet, ArrowLeftRight  } from "lucide-vue-next";
 
 const loading = ref(false);
 const store = useStore();
@@ -88,6 +88,7 @@ const isModalVisible = ref(false);
 const modalTitle = ref(""); // Define modalTitle as a reactive variable
 const transactionData = ref({});
 const transactions = computed(() => store.getters["transaction/transactions"]);
+const summary = computed(() => store.getters["dashboard/summary"]);
 
 const columns = [
   // { key: "id", label: "S/N" },
