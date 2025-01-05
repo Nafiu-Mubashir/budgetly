@@ -36,7 +36,6 @@ export default {
         async login({ commit }, userObj) {
             try {
                 const response = await api.post("/auth/login", userObj);
-                console.log(response);
 
                 commit("SET_TOKEN", response.token); // Save the token
                 commit("SET_EMAIL", userObj.email); // Save the email

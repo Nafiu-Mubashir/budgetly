@@ -13,8 +13,8 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
       <DashCard title="Total Budgets" :value="summary.Total_Budget" :icon="WalletMinimal" />
       <DashCard title="Remaining Budget" :value="summary.Remaining_Budget" :icon="Wallet" />
-      <DashCard title="Used Budget" :value="0" :icon="FileUp" />
-      <DashCard title="Monthly Allocation" :value="0" :icon="FileDown" />
+      <DashCard title="Used Budget" :value="summary.Used_Budget" :icon="FileUp" />
+      <DashCard title="Monthly Allocation" :value="summary.Monthly_Allocation" :icon="FileDown" />
     </div>
     <!-- <div v-if="loading" class="mt-5 text-center">
       Loading budgets...
@@ -112,25 +112,4 @@ const closeModal = () => {
   isModalVisible.value = false; // Hide the modal
 };
 
-// // Fetch budgets on component mount
-// const fetchBudgets = async () => {
-//   loading.value = true;
-//   try {
-//     await store.dispatch("budget/fetchBudgets");
-//   } catch (error) {
-//     console.error("Error fetching budgets:", error);
-//   } finally {
-//     loading.value = false;
-//   }
-// };
-
-// onMounted(fetchBudgets);
 </script>
-
-<!-- <style scoped>
-
-.table-container {
-  overflow-visible;
-}
-
-</style> -->

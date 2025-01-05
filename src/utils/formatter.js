@@ -114,7 +114,7 @@ export const convertToBase64String = (file, cb) => {
         cb(reader.result);
     };
     reader.onerror = function (error) {
-        console.log('Error: ', error);
+        console.error('Error: ', error);
     };
 };
 

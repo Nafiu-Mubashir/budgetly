@@ -14,8 +14,8 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
       <DashCard title="Total Income" :value="summary.Total_Income" />
       <DashCard title="Total Expenses" :value="summary.Total_Expenses" />
-      <DashCard title="Net Balance" :value="0" :icon="Wallet" />
-      <DashCard title="Total Transactions" :value="0" :icon="ArrowLeftRight" />
+      <DashCard title="Net Balance" :value="summary.Net_Balance" :icon="Wallet" />
+      <DashCard title="Total Transactions" :value="summary.Total_Transactions" :icon="ArrowLeftRight" />
     </div>
 
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">

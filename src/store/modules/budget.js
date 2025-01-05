@@ -41,7 +41,6 @@ export default {
         async fetchSingleBudget({ commit }, budgetId) {
             try {
                 const response = await api.get(`/budgets/${budgetId}`);
-                console.log(response);
 
                 commit("SET_SINGLE_BUDGET", response.budget);
                 return response.budget;
@@ -71,7 +70,6 @@ export default {
             try {
                 const response = await api.delete(`/budgets/${budgetId}`);
                 commit("DELETE_BUDGET", budgetId);
-                console.log(response);
                 
                 return response;
             } catch (error) {

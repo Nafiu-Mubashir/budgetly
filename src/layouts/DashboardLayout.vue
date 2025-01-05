@@ -21,24 +21,16 @@ const store = useStore();
 
 onMounted(async () => {
   try {
-    await store.dispatch("dashboard/fetchSummary");
-    await store.dispatch("dashboard/fetchMonthlySummary");
+    // Call all APIs concurrently
+    await Promise.all([
+      store.dispatch("dashboard/fetchSummary"),
+      store.dispatch("dashboard/fetchMonthlySummary"),
+      store.dispatch("transaction/fetchTransactions"),
+      store.dispatch("budget/fetchBudgets"),
+    ]);
   } catch (error) {
-    console.error("Error fetching summary or monthly data:", error);
+    console.error("Error fetching data:", error);
   }
-  
-  try {
-    await store.dispatch("transaction/fetchTransactions");
-  } catch (error) {
-    console.error("Error fetching transactions:", error);
-  }
-
-  try {
-    await store.dispatch("budget/fetchBudgets");
-  } catch (error) {
-    console.error("Error fetching budgets:", error);
-  }
-
 });
 </script>
 

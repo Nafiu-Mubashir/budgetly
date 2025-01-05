@@ -13,7 +13,7 @@
       "
     >
       <form @submit.prevent="submitForm" class="space-y-3">
-         <Select
+        <Select
           v-model="formData.budget_id"
           :options="budgetOptions"
           label=""
@@ -144,19 +144,13 @@ const dropdownOptions = [
 ];
 const BUDGETS = computed(() => store.getters["budget/budgets"]);
 // Extract only id and title
-const budgetOptions = computed(() => 
-  BUDGETS.value.map(budget => ({
+const budgetOptions = computed(() =>
+  BUDGETS.value.map((budget) => ({
     value: budget.id,
     label: budget.title,
   }))
 );
 
-// Example: Using budgetOptions
-console.log(budgetOptions.value);
-
-
-// Usage example: Logging the transformed array
-console.log(budgetOptions.value);
 // Props passed into the modal
 const { transactionData, modalTitle } = defineProps({
   isVisible: { type: Boolean, required: true },
@@ -176,7 +170,6 @@ const closeModal = () => {
 // Submit form for both create and edit
 const submitForm = async () => {
   loading.value = true;
-  // console.log(formData.value);
 
   try {
     let response;
@@ -191,7 +184,6 @@ const submitForm = async () => {
       });
     } else if (modalTitle === "Edit Transaction") {
       // Edit Transaction
-      console.log(formData.value, formData.value.id);
 
       response = await store.dispatch("transaction/updateTransaction", {
         id: formData.value.id,
@@ -205,6 +197,8 @@ const submitForm = async () => {
     if (response.statusCode === 200) {
       toast.success(response.message);
       await store.dispatch("transaction/fetchTransactions");
+      await store.dispatch("dashboard/fetchSummary");
+      await store.dispatch("dashboard/fetchMonthlySummary");
       closeModal();
     }
   } catch (error) {
@@ -225,11 +219,12 @@ const handleDelete = async () => {
       "transaction/deleteTransaction",
       transactionData.id
     );
-    console.log(response);
 
     if (response.statusCode === 200) {
       toast.success(response.message);
       await store.dispatch("transaction/fetchTransactions");
+      await store.dispatch("dashboard/fetchSummary");
+      await store.dispatch("dashboard/fetchMonthlySummary");
       closeModal();
     } else {
       toast.error(response.error);

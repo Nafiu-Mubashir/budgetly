@@ -118,7 +118,7 @@ const login = async () => {
       }, 1000); // 60 seconds (60000 milliseconds)
     }
   } catch (error) {
-    toast.error(error.response?.data?.error);
+    toast.error(error.response?.data?.error || error.message);
     console.error(error);
   } finally {
     loading.value = false; // Hide the spinner

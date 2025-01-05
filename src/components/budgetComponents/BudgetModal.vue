@@ -161,6 +161,8 @@ const submitForm = async () => {
     if (response.statusCode === 200) {
       toast.success(response.message);
       await store.dispatch("budget/fetchBudgets");
+      await store.dispatch("dashboard/fetchSummary");
+      await store.dispatch("dashboard/fetchMonthlySummary");
       closeModal();
     }
   } catch (error) {
@@ -180,6 +182,8 @@ const handleDelete = async () => {
     if (response.statusCode === 200) {
       toast.success(response.message);
       await store.dispatch("budget/fetchBudgets");
+      await store.dispatch("dashboard/fetchSummary");
+      await store.dispatch("dashboard/fetchMonthlySummary");
       closeModal();
     } else {
       toast.error(response.error);

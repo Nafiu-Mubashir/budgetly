@@ -4,7 +4,7 @@
       <!-- Overview Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <DashCard title="Total Budget" :value="summary.Total_Budget" />
-        <DashCard title="Balance" :value="summary.Balance" />
+        <DashCard title="Balance" :value="summary.Net_Balance" />
         <DashCard title="Total Income" :value="summary.Total_Income" />
         <DashCard title="Total Expenses" :value="summary.Total_Expenses" />
       </div>
@@ -119,12 +119,11 @@ const categories = computed(
   () => monthlySummary.value.map((item) => item.Month) // Extract months for x-axis
 );
 const incomeSeries = computed(
-  () => monthlySummary.value.map((item) => parseFloat(item.total_income)) // Total income data
+  () => monthlySummary.value.map((item) => parseFloat(item.Total_Income)) // Total income data
 );
 const expenseSeries = computed(
-  () => monthlySummary.value.map((item) => parseFloat(item.total_expenses)) // Total expenses data
+  () => monthlySummary.value.map((item) => parseFloat(item.Total_Expenses)) // Total expenses data
 );
-console.log(categories.value, "categories");
 
 
 // Chart options and series
