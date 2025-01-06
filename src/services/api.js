@@ -2,10 +2,9 @@ import axios from "axios";
 
 // Create an Axios instance
 const api = axios.create({
-    baseURL: "https://personal-finance-manager-v1ha.onrender.com/api", // Replace with your API base URL
+    baseURL: import.meta.env.VITE_API_BASE_URL, // Replace with your API base URL
     timeout: 10000, // Timeout after 10 seconds
 });
-
 // Request Interceptor
 api.interceptors.request.use(
     (config) => {

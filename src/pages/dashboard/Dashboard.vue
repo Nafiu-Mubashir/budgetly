@@ -62,10 +62,10 @@
           >
             <div class="flex items-center space-x-4">
               <div>
-                <p class="font-bold">{{ transaction.narration }}</p>
+                <p class="font-bold">{{ transaction.Narration }}</p>
                 <p class="text-sm text-gray-500">
-                  {{ shortDateFormatter(transaction.created_at) }},
-                  {{ timeFormatter(transaction.created_at) }}
+                  {{ shortDateFormatter(transaction.Date_Created) }},
+                  {{ timeFormatter(transaction.Date_Created) }}
                 </p>
               </div>
             </div>
