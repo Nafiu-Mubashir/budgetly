@@ -24,8 +24,8 @@
         @click="togglePasswordVisibility"
         class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-800"
       >
-        <span v-if="showPassword">🙈</span>
-        <span v-else>👁️</span>
+        <span v-if="showPassword"><EyeOff /></span>
+        <span v-else><Eye /></span>
       </button>
     </div>
   </div>
@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref, defineProps } from "vue";
+import { EyeOff,Eye  } from "lucide-vue-next";
 
 defineProps({
   id: { type: String, required: true }, // Input ID

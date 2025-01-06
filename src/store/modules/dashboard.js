@@ -3,8 +3,7 @@ import api from "@/services/api";
 export default {
     namespaced: true,
     state: {
-        summary: {}, // Centralized budget data
-        monthlySummary: [],
+        summary: {}, // Centralized summary data
     },
     mutations: {
         SET_SUMMARY(state, summary) {
@@ -24,18 +23,8 @@ export default {
                 throw error;
             }
         },
-        async fetchMonthlySummary({ commit }) {
-            try {
-                const response = await api.get(`/insights/monthly`);
-                commit("SET_MONTHLY_SUMMARY", response.data);
-                return response.data;
-            } catch (error) {
-                throw error;
-            }
-        },
     },
     getters: {
         summary: (state) => state.summary,
-        monthlySummary: (state) => state.monthlySummary
     },
 };

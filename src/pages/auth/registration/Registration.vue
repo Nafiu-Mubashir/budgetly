@@ -29,16 +29,32 @@
             type="text"
             placeholder="Enter your username"
           />
-          <Input
-            v-model="formData.email"
-            type="email"
-            placeholder="Enter your email"
-          />
-          <Input
-            v-model="formData.password"
-            type="password"
-            placeholder="Enter your password"
-          />
+          <div>
+            <Input
+              v-model="formData.email"
+              type="email"
+              placeholder="Enter your email"
+            />
+            <p
+              v-if="!emailIsValid && formData.email"
+              class="text-red-500 text-sm"
+            >
+              Please enter a valid email address.
+            </p>
+          </div>
+          <div>
+            <Input
+              v-model="formData.password"
+              type="password"
+              placeholder="Enter your password"
+            />
+            <p
+              v-if="!passwordIsValid && formData.password"
+              class="text-red-500 text-sm mt-0"
+            >
+              Password must be at least 6 characters long.
+            </p>
+          </div>
           <div class="text-center text-xs text-gray-400">
             <p>By continuing, you accept our</p>
             <p>
@@ -48,15 +64,12 @@
           </div>
 
           <!-- Button with loading spinner -->
-          <button
-            type="submit"
-            class="w-full bg-main text-white p-2 py-3 rounded capitalize flex justify-center items-center"
-            :disabled="loading"
-          >
-            <span v-if="!loading">register</span>
-             <Spinner v-else />
-            <!-- Spinner when loading -->
-          </button>
+
+          <Button
+            label="register"
+            :loading="loading"
+            :disabled="!isFormValid || loading"
+          />
 
           <p class="text-sm text-center">
             Already have an account
@@ -70,11 +83,12 @@
 
 <script setup>
 import Input from "@/components/input/Input.vue";
-import Spinner from "@/components/spinner/Spinner.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import { useStore } from "vuex";
+import Button from "@/components/button/Button.vue";
+
 const store = useStore();
 
 const formData = ref({
@@ -84,6 +98,13 @@ const formData = ref({
 });
 const router = useRouter();
 const loading = ref(false);
+// Validation rules
+const emailIsValid = computed(() =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.value.email)
+);
+const passwordIsValid = computed(() => formData.value.password.length >= 6);
+// Check if the form is valid
+const isFormValid = computed(() => emailIsValid.value && passwordIsValid.value);
 
 const register = async () => {
   loading.value = true; // Show the spinner
@@ -91,11 +112,10 @@ const register = async () => {
   try {
     const response = await store.dispatch("auth/register", formData.value);
     if (response.statusCode === 200) {
-      
       toast.success(response.message);
       setTimeout(() => {
         router.push("/login"); // Redirect to dashboard
-      }, 1000)
+      }, 1000);
     }
   } catch (error) {
     toast.error(error.response.data.error);
@@ -105,5 +125,4 @@ const register = async () => {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

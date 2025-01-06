@@ -39,36 +39,27 @@
           :disabled="false"
           error=""
         />
-        <button
-          type="submit"
-          class="bg-main text-white px-2 py-3 w-full rounded mt-4"
-          :disabled="loading"
-        >
-          <span v-if="!loading">{{
-            modalTitle === "Add New Transaction" ? "Add" : "Update"
-          }}</span>
-          <Spinner v-else />
-        </button>
+        <Button :label="modalTitle === 'Add New Transaction' ? 'Add' : 'Edit'" :loading="loading" />
       </form>
     </template>
 
     <!-- View Transaction -->
     <template v-else-if="modalTitle === 'View Transaction'">
-      <div class="p-3 grid grid-cols-2 gap-4">
+      <div class="p-3 grid grid-cols-2 md:grid-cols-3 gap-4">
         <div class="flex-col">
-          <label class="font-semibold text-sm text-main">Narration</label>
+          <label class="text-xs text-secondary">Narration</label>
           <p class="text-sm capitalize">{{ transactionData.narration }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm text-main">Amount</label>
+          <label class="text-xs text-secondary">Amount</label>
           <p class="text-sm">{{ commaFormatter(transactionData.amount) }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm text-main">Category</label>
+          <label class="text-xs text-secondary">Category</label>
           <p class="text-sm capitalize">{{ transactionData.category }}</p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm text-main"
+          <label class="text-xs text-secondary"
             >Transaction Type</label
           >
           <p class="text-sm capitalize">
@@ -76,13 +67,13 @@
           </p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm text-main">Date Created</label>
+          <label class="text-xs text-secondary">Date Created</label>
           <p class="text-sm">
             {{ shortDateFormatter(transactionData.created_at) }}
           </p>
         </div>
         <div class="flex-col">
-          <label class="font-semibold text-sm text-main">Time</label>
+          <label class="text-xs text-secondary">Time</label>
           <p class="text-sm">
             {{ timeFormatter(transactionData.created_at, true) }}
           </p>
@@ -92,7 +83,7 @@
 
     <!-- Delete Transaction -->
     <template v-else-if="modalTitle === 'Delete Transaction'">
-      <div class="space-y-4">
+      <div class="space-y-10">
         <p class="mb-4 text-sm md:text-sm text-center">
           Are you sure you want to delete transaction:
           <span class="text-main font-semibold capitalize">{{
@@ -100,16 +91,16 @@
           }}</span
           >?
         </p>
-        <div class="flex justify-between">
+        <div class="flex justify-between gap-3 ">
           <button
             @click="handleDelete"
-            class="bg-red-500 text-white px-4 py-2 rounded"
+            class="bg-red-600 text-white px-4 p-2 rounded w-1/2"
           >
             Yes
           </button>
           <button
             @click="closeModal"
-            class="bg-gray-500 text-white px-4 py-2 rounded"
+            class="bg-gray-500 text-white px-4 py-2 rounded w-1/2"
           >
             No
           </button>
@@ -133,6 +124,7 @@ import {
 } from "@/utils/formatter";
 
 import Select from "@/components/selectInput/Select.vue";
+import Button from "@/components/button/Button.vue";
 
 const store = useStore();
 const loading = ref(false);
@@ -196,10 +188,9 @@ const submitForm = async () => {
 
     if (response.statusCode === 200) {
       toast.success(response.message);
+      closeModal();
       await store.dispatch("transaction/fetchTransactions");
       await store.dispatch("dashboard/fetchSummary");
-      await store.dispatch("dashboard/fetchMonthlySummary");
-      closeModal();
     }
   } catch (error) {
     toast.error(error.response.data.error);
@@ -222,10 +213,9 @@ const handleDelete = async () => {
 
     if (response.statusCode === 200) {
       toast.success(response.message);
+      closeModal();
       await store.dispatch("transaction/fetchTransactions");
       await store.dispatch("dashboard/fetchSummary");
-      await store.dispatch("dashboard/fetchMonthlySummary");
-      closeModal();
     } else {
       toast.error(response.error);
     }

@@ -24,9 +24,6 @@ onMounted(async () => {
     // Call all APIs concurrently
     await Promise.all([
       store.dispatch("dashboard/fetchSummary"),
-      store.dispatch("dashboard/fetchMonthlySummary"),
-      store.dispatch("transaction/fetchTransactions"),
-      store.dispatch("budget/fetchBudgets"),
     ]);
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -35,7 +32,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.mainBg {
- background: url('../assets/main-bg.jpg')
-}
+
 </style>

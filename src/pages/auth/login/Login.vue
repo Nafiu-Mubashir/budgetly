@@ -49,21 +49,14 @@
           />
           <p
             v-if="!passwordIsValid && formData.password"
-            class="text-red-500 text-sm"
+            class="text-red-500 text-sm mt-0"
           >
             Password must be at least 6 characters long.
           </p>
 
           <!-- Button with loading spinner -->
-          <button
-            type="submit"
-            class="w-full bg-main text-white p-2 py-3 rounded capitalize flex justify-center items-center"
-            :disabled="!isFormValid || loading"
-            :class="!isFormValid && 'cursor-not-allowed bg-main/60'"
-          >
-            <span v-if="!loading">Login</span>
-            <Spinner v-else />
-          </button>
+          
+          <Button label="Login" :loading="loading" :disabled="!isFormValid || loading" />
 
           <p class="text-sm text-center">
             Don't have an account?
@@ -79,11 +72,11 @@
 
 <script setup>
 import Input from "@/components/input/Input.vue";
-import Spinner from "@/components/spinner/Spinner.vue";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import { useStore } from "vuex";
+import Button from "@/components/button/Button.vue";
 
 const store = useStore();
 const router = useRouter();

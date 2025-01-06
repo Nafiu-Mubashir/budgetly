@@ -14,8 +14,16 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
       <DashCard title="Total Income" :value="summary.Total_Income" />
       <DashCard title="Total Expenses" :value="summary.Total_Expenses" />
-      <DashCard title="Net Balance" :value="summary.Net_Balance" :icon="Wallet" />
-      <DashCard title="Total Transactions" :value="summary.Total_Transactions" :icon="ArrowLeftRight" />
+      <DashCard
+        title="Net Balance"
+        :value="summary.Net_Balance"
+        :icon="Wallet"
+      />
+      <DashCard
+        title="Total Transactions"
+        :value="summary.Total_Transactions"
+        :icon="ArrowLeftRight"
+      />
     </div>
 
     <div class="mt-5 bg-white rounded-lg shadow p-3 md:p-6">
@@ -33,24 +41,27 @@
               <li>
                 <button
                   @click="openModal('Edit Transaction', row)"
-                  class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100"
                 >
+                  <FilePenLine size="16"/>
                   Edit
                 </button>
               </li>
               <li>
                 <button
                   @click="openModal('View Transaction', row)"
-                  class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100"
                 >
+                  <Eye size="16"/>
                   View
                 </button>
               </li>
               <li>
                 <button
                   @click="openModal('Delete Transaction', row)"
-                  class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
+                  class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
                 >
+                  <Trash2 size="16"/>
                   Delete
                 </button>
               </li>
@@ -76,10 +87,17 @@
 import { ref, computed } from "vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
-import TransactionModal from "@/components/transactionComponents/TransactionModal.vue";
+import TransactionModal from "@/components/transaction/TransactionModal.vue";
 import { useStore } from "vuex";
 import DashCard from "@/components/cards/DashCard.vue";
-import { Wallet, ArrowLeftRight  } from "lucide-vue-next";
+import {
+  Wallet,
+  ArrowLeftRight,
+  FilePenLine,
+  Eye,
+  Trash2,
+} from "lucide-vue-next";
+import { onMounted } from "vue";
 
 const loading = ref(false);
 const store = useStore();
@@ -121,4 +139,15 @@ const handleModalAction = ({ type, data }) => {
   }
   closeModal(); // Close the modal after the action
 };
+
+onMounted(async () => {
+  try {
+    loading.value = true
+    await store.dispatch("transaction/fetchTransactions")
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }finally{
+    loading.value = false
+  }
+});
 </script>

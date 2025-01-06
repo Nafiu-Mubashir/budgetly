@@ -4,23 +4,23 @@
     class="inset-0 h-screen flex items-center justify-center z-50 top-[-16px] absolute bg-black bg-opacity-50"
   >
     <div
-      class="bg-white rounded-lg shadow-lg w-[95%] md:w-full max-w-md p-6 space-y-4"
+      class="bg-white rounded-lg shadow-lg w-[95%] md:w-full max-w-lg"
     >
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center p-3 border-b">
         <!-- Modal Header -->
         <header v-if="title">
-          <h2 class="text-base font-bold">{{ title }}</h2>
+          <h2 class="text-base">{{ title }}</h2>
         </header>
         <!-- Close Button -->
         <button
           @click="closeModal"
-          class="block ml-auto text-red-500 hover:text-red-600"
+          class="block ml-auto"
         >
-          ✖
+          <X size="20" />
         </button>
       </div>
       <!-- Modal Body -->
-      <div>
+      <div class="p-4">
         <slot></slot>
       </div>
       <!-- Modal Footer -->
@@ -32,7 +32,8 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, onMounted, onUnmounted } from "vue";
+import { defineProps, defineEmits, } from "vue";
+import { X } from 'lucide-vue-next';
 
 // Props passed into the modal
 const props = defineProps({

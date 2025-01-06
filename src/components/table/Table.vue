@@ -2,11 +2,7 @@
   <div class="relative overflow-scroll md:overflow-visible overflow-y-visible">
     <!-- Conditionally Render Filter Input -->
     <div v-if="filter" class="mb-4 md:w-[30%] ml-auto">
-      <Input
-        v-model="filterText"
-        type="text"
-        :placeholder="placeholder"
-      />
+      <Input v-model="filterText" type="text" :placeholder="placeholder" />
     </div>
     <table
       class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg"
@@ -85,14 +81,14 @@
   </div>
 
   <!-- Pagination Controls -->
-  <div class="flex justify-between items-center mt-6">
+  <div class="flex justify-center md:justify-end gap-5 items-center mt-6" v-if="paginate === true">
     <button
       @click="prevPage"
       :disabled="currentPage === 1"
-      class="px-2 py-1 bg-main text-white rounded disabled:opacity-50 hover:bg-main transition"
+      class="px-2 py-2 bg-main text-white rounded-full disabled:opacity-50 hover:bg-main transition"
       :class="currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'"
     >
-      Prev
+      <ChevronLeft />
     </button>
 
     <div class="flex space-x-2">
@@ -100,7 +96,7 @@
         v-for="page in totalPages"
         :key="page"
         @click="goToPage(page)"
-        class="px-3 py-1 rounded-full transition"
+        class="px-3 py-2 rounded transition"
         :class="[
           'text-gray-500 hover:bg-main hover:text-white',
           currentPage === page ? 'bg-main text-white' : 'bg-gray-100',
@@ -113,10 +109,12 @@
     <button
       @click="nextPage"
       :disabled="currentPage === totalPages"
-      class="px-2 py-1 bg-main text-white rounded disabled:opacity-50 hover:bg-main transition"
-      :class="currentPage === totalPages ? 'cursor-not-allowed' : 'cursor-pointer'"
+      class="px-2 py-2 bg-main text-white cursor-pointer rounded-full disabled:opacity-50 hover:bg-main transition"
+      :class="
+        currentPage === totalPages ? 'cursor-not-allowed' : 'cursor-pointer'
+      "
     >
-      Next
+      <ChevronRight />
     </button>
   </div>
 </template>
@@ -125,6 +123,7 @@
 import { defineProps, computed, ref } from "vue";
 import Input from "../input/Input.vue";
 import { commaFormatter } from "@/utils/formatter";
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 // Destructure props and extract rowsPerPage
 const {
@@ -133,6 +132,7 @@ const {
   rowsPerPage = 10,
   filter = false, // Enable or disable filtering
   filterKey = "", // Key to filter by
+  paginate = true,
 } = defineProps({
   data: { type: Array, required: true, default: () => [] },
   columns: { type: Array, required: true },
@@ -141,6 +141,7 @@ const {
   filter: { type: Boolean, default: false },
   filterKey: { type: String, default: "" },
   placeholder: { type: String, default: "" },
+  paginate: {type: Boolean, default: true},
 });
 
 // State for pagination

@@ -20,7 +20,7 @@
         :disabled="disabled"
       >
         {{ selectedOption?.label || placeholder }}
-        <span class="absolute right-4 top-2.5 text-gray-500"> ▼ </span>
+        <span class="absolute right-4 top-2.5 text-gray-500"> <ChevronDown /> </span>
       </button>
       <!-- Dropdown Options -->
       <ul
@@ -31,7 +31,6 @@
           class="px-4 py-2 cursor-pointer"
           disabled
         >
-         {{ placeholder }}
         </li>
         <li
           v-for="option in options"
@@ -55,6 +54,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import { ChevronDown } from 'lucide-vue-next';
 
 // Props
 const props = defineProps({

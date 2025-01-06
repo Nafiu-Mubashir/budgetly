@@ -11,10 +11,26 @@
     </section>
     <!-- Summary Section -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-      <DashCard title="Total Budgets" :value="summary.Total_Budget" :icon="WalletMinimal" />
-      <DashCard title="Remaining Budget" :value="summary.Remaining_Budget" :icon="Wallet" />
-      <DashCard title="Used Budget" :value="summary.Used_Budget" :icon="FileUp" />
-      <DashCard title="Monthly Allocation" :value="summary.Monthly_Allocation" :icon="FileDown" />
+      <DashCard
+        title="Total Budgets"
+        :value="summary.Total_Budget"
+        :icon="WalletMinimal"
+      />
+      <DashCard
+        title="Remaining Budget"
+        :value="summary.Remaining_Budget"
+        :icon="Wallet"
+      />
+      <DashCard
+        title="Used Budget"
+        :value="summary.Used_Budget"
+        :icon="FileUp"
+      />
+      <DashCard
+        title="Monthly Allocation"
+        :value="summary.Monthly_Allocation"
+        :icon="FileDown"
+      />
     </div>
     <!-- <div v-if="loading" class="mt-5 text-center">
       Loading budgets...
@@ -24,8 +40,12 @@
         :data="BUDGETS"
         :columns="columns"
         :loading="loading"
-        filter="true"
-        filterKey="duration"
+         filter
+        filterType="select"
+        :filterOptions="[
+          { label: 'Monthly', value: 'monthly' },
+          { label: 'Expense', value: 'expense' },
+        ]"
         placeholder="Filter by duration"
       >
         <template #actions="{ row }">
@@ -34,24 +54,27 @@
               <li>
                 <button
                   @click="openModal('Edit Budget', row)"
-                  class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-10"
                 >
+                  <FilePenLine size="16" />
                   Edit
                 </button>
               </li>
               <li>
                 <button
                   @click="openModal('View Budget', row)"
-                  class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100"
                 >
+                  <Eye size="16" />
                   View
                 </button>
               </li>
               <li>
                 <button
                   @click="openModal('Delete Budget', row)"
-                  class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
+                  class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
                 >
+                  <Trash2 size="16" />
                   Delete
                 </button>
               </li>
@@ -74,13 +97,21 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import Table from "@/components/table/Table.vue";
 import Dropdown from "@/components/dropdown/Dropdown.vue";
-import BudgetModal from "@/components/budgetComponents/BudgetModal.vue";
+import BudgetModal from "@/components/budget/BudgetModal.vue";
 import { useStore } from "vuex";
 import DashCard from "@/components/cards/DashCard.vue";
-import { FileDown, FileUp, Wallet, WalletMinimal } from "lucide-vue-next";
+import {
+  FileDown,
+  FileUp,
+  Wallet,
+  WalletMinimal,
+  FilePenLine,
+  Eye,
+  Trash2,
+} from "lucide-vue-next";
 
 const loading = ref(false);
 const store = useStore();
@@ -112,4 +143,14 @@ const closeModal = () => {
   isModalVisible.value = false; // Hide the modal
 };
 
+onMounted(async () => {
+  try {
+    loading.value = true
+    await store.dispatch("budget/fetchBudgets")
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }finally{
+    loading.value = false
+  }
+});
 </script>

@@ -62,7 +62,7 @@ src/
 
 ### **Prerequisites**
 Ensure you have the following installed:
-- **Node.js** (>= 16.x)
+- **Node.js** (>= 20.x)
 - **npm** or **yarn**
 
 ### **Installation**

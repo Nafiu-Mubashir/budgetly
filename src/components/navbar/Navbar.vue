@@ -1,7 +1,7 @@
 <template>
   <div class="border-b p-2 bg-white">
-    <nav class="text-black flex justify-between items-center w-[95%] mx-auto">
-      <div class="flex items-center w-auto md:w-[40%]">
+    <nav class="text-black flex justify-end items-center w-[95%] mx-auto">
+      <!-- <div class="flex items-center w-auto md:w-[40%]">
         <div class="relative w-full hidden md:block">
           <div
             class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
@@ -20,13 +20,10 @@
             required
           />
         </div>
-      </div>
+      </div> -->
       <div class="flex items-center gap-2">
-        <CircleUser strokeWidth="{1}" size="32" />
-        <div>
-          <h2 class="text-xs">{{ username }}</h2>
-          <p class="text-xs">Online</p>
-        </div>
+        <Bell />
+        <Avatar :name="username" size="35" />
       </div>
     </nav>
   </div>
@@ -36,7 +33,8 @@
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import { useStore } from "vuex";
-import { CircleUser, Search } from "lucide-vue-next";
+import { Bell } from "lucide-vue-next";
+import Avatar from "@/components/avatar/Avatar.vue"
 
 const route = useRoute();
 const store = useStore();

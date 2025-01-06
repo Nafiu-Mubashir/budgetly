@@ -10,7 +10,7 @@ export default {
       },
       colors: {
         main: "#57CF87",
-        secondary: "#EBEBEB"
+        secondary: "#6b7280"
       },
       fontFamily: {
         sans: ["Poppins", "sans-serif"], // Use Poppins for sans-serif

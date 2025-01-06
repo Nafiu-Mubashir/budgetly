@@ -1,7 +1,17 @@
 <template>
   <div class="space-y-6">
+    <div>
+      <h2 class="font-bold text-base">{{ username }}</h2>
+      <p class="text-secondary text-sm">Hello, welcome back 👋</p>
+    </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
       <!-- Overview Cards -->
+        <div
+        v-if="!summary"
+      v-for="index in 4"
+      :key="index"
+      class="bg-gray-200 animate-pulse rounded-lg shadow p-4 h-24"
+    ></div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <DashCard title="Total Budget" :value="summary.Total_Budget" />
         <DashCard title="Balance" :value="summary.Net_Balance" />
@@ -24,7 +34,10 @@
     <div class="bg-white rounded-lg shadow space-y-3 p-4">
       <h2 class="text-lg font-bold">Top Spending Categories</h2>
       <!-- Top Spending Categories -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+       <div v-if="summary?.Top_Spending_Categories?.length === 0">
+          No transactions available
+        </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" v-else>
         <DashBudgetCard
           v-for="category in summary.Top_Spending_Categories"
           :title="category.Category"
@@ -38,12 +51,12 @@
       <!-- Recent Transactions -->
       <div class="bg-white rounded-lg shadow p-6">
         <h2 class="text-lg font-bold mb-4">Recent Transactions</h2>
-        <div v-if="latestTransactions.length === 0">
+        <div v-if="summary?.Last_Transactions?.length === 0">
           No transactions available
         </div>
         <ul class="space-y-4" v-else>
           <li
-            v-for="(transaction, index) in latestTransactions"
+            v-for="(transaction, index) in summary?.Last_Transactions"
             :key="index"
             class="flex justify-between"
           >
@@ -76,7 +89,7 @@
         <!-- latest budgets Table -->
         <div class="bg-white rounded-lg shadow p-6">
           <h2 class="text-lg font-bold mb-4">Recent Budgets</h2>
-          <Table :data="latestBudget" :columns="columns" />
+          <Table :data="summary.Last_Budgets" :columns="columns" paginate="false" />
         </div>
       </div>
     </div>
@@ -88,7 +101,7 @@ import ApexChart from "vue3-apexcharts";
 import DashCard from "@/components/cards/DashCard.vue";
 import DashBudgetCard from "@/components/cards/DashBudgetCard.vue";
 import Table from "@/components/table/Table.vue";
-import { computed, toRaw } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import {
   commaFormatter,
@@ -97,32 +110,19 @@ import {
 } from "@/utils/formatter";
 
 const store = useStore();
+const username = store.getters["auth/user"];
 const summary = computed(() => store.getters["dashboard/summary"]);
-const monthlySummary = computed(
-  () => store.getters["dashboard/monthlySummary"]
-);
+console.log(summary.value.Monthly_Breakdown);
 
-const latestTransactions = computed(() => {
-  // Get the transactions from the store
-  const allTransactions = store.getters["transaction/transactions"];
-  return allTransactions.slice(0, 3); // Take the first 3 transactions
-});
-
-const latestBudget = computed(() => {
-  // Get the budgets from the store
-  const allBudgets = store.getters["budget/budgets"];
-  return allBudgets.slice(0, 3); // Take the first 3 budgets
-});
-
-// Transform `monthlySummary` data for the chart
+// Transform `monthly summary` data for the chart
 const categories = computed(
-  () => monthlySummary.value.map((item) => item.Month) // Extract months for x-axis
+  () => summary?.value?.Monthly_Breakdown?.map((item) => item.Month) // Extract months for x-axis
 );
 const incomeSeries = computed(
-  () => monthlySummary.value.map((item) => parseFloat(item.Total_Income)) // Total income data
+  () => summary?.value?.Monthly_Breakdown?.map((item) => parseFloat(item.Total_Income)) // Total income data
 );
 const expenseSeries = computed(
-  () => monthlySummary.value.map((item) => parseFloat(item.Total_Expenses)) // Total expenses data
+  () => summary?.value?.Monthly_Breakdown?.map((item) => parseFloat(item.Total_Expenses)) // Total expenses data
 );
 
 
@@ -155,9 +155,9 @@ const chartSeries = computed(() => [
 
 // Define columns for the table
 const columns = [
-  { key: "title", label: "Title" },
-  { key: "total_amount", label: "Total Amount ($)" },
-  { key: "duration", label: "Duration" },
+  { key: "Title", label: "Title" },
+  { key: "Total_Amount", label: "Total Amount ($)" },
+  { key: "Duration", label: "Duration" },
 ];
 
 </script>
