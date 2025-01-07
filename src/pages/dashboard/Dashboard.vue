@@ -72,13 +72,13 @@
             <p
               :class="[
                 'text-sm font-bold',
-                transaction.transaction_type === 'income'
+                transaction.Transaction_Type === 'income'
                   ? 'text-green-500'
                   : 'text-red-500',
               ]"
             >
-              {{ transaction.transaction_type === "income" ? "+" : "-" }}${{
-                commaFormatter(transaction.amount)
+              {{ transaction.Transaction_Type === "income" ? "+" : "-" }}${{
+                commaFormatter(transaction.Amount)
               }}
             </p>
           </li>

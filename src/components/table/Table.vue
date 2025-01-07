@@ -199,7 +199,7 @@ const resolveCell = (row, key) => {
   const value = key.split(".").reduce((acc, prop) => acc?.[prop], row) || "";
 
   // Apply commaFormatter if the key matches 'total_amount' or 'amount'
-  if (key === "total_amount" || key === "amount") {
+  if (key === "total_amount" || key === "amount" || key === "Total_Amount") {
     return "$" + commaFormatter(value);
   }
 
